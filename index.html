@@ -6,75 +6,111 @@
     <title>Cotizadores CASH4U</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        header {
+            width: 100%;
+            background-color: #FF7F00; /* Un color naranja fuerte */
+            padding: 20px 0;
+            text-align: center;
+            color: white;
         }
         h1 {
-            color: #333;
+            margin: 0;
+            font-size: 2em;
+        }
+        .content {
+            width: 90%;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
         }
         .botones {
             display: flex;
             gap: 10px;
+            justify-content: center;
             margin-bottom: 20px;
         }
         button {
             padding: 10px 20px;
             font-size: 16px;
-            background-color: #FFA500; /* Color naranja */
+            background-color: #FF7F00; /* Un color naranja fuerte */
             color: white;
             border: none;
             cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
         }
         button:hover {
-            background-color: #cc8400; /* Un tono más oscuro de naranja */
+            background-color: #e67000; /* Un tono más oscuro de naranja */
         }
         .instrucciones {
             margin-top: 20px;
             color: #555;
         }
         iframe {
-            border: 1px solid #ccc;
-            margin-top: 20px;
+            border: none;
             width: 100%;
             height: 500px;
+            border-radius: 8px;
         }
     </style>
 </head>
 <body>
-    <h1>Selecciona un PDF para visualizar</h1>
-    <!-- Botones para visualizar los PDFs -->
-    <div class="botones">
-        <button onclick="visualizarPDF('COTIZADOR INDIVIDUAL v2.0.pdf')">COTIZADOR INDIVIDUAL</button>
-        <button onclick="visualizarPDF('formulario2.pdf')">COTIZADOR CORRESIDENCIAL</button>
-        <button onclick="visualizarPDF('formulario3.pdf')">COTIZADOR CASH4ALL</button>
+    <header>
+        <h1>COTIZADORES PARA EJECUTIVOS CA$H4U</h1>
+    </header>
+    <div class="content">
+        <h2>Selecciona un PDF para editar: </h2>
+        <!-- Botones para visualizar los PDFs -->
+        <div class="botones">
+            <button onclick="visualizarPDF('COTIZADOR INDIVIDUAL v2.0.pdf')">COTIZADOR INDIVIDUAL</button>
+            <button onclick="visualizarPDF('COTIZADOR CORRESIDENCIAL v2.0.pdf')">COTIZADOR CORRESIDENCIAL</button>
+            <button onclick="visualizarPDF('COTIZADOR CASH4ALL v2.0.pdf')">COTIZADOR CASH4ALL</button>
+            <button onclick="unirPDFs()">UNIR PDFS</button>
+        </div>
+
+        <!-- Espacio para instrucciones -->
+        <div class="instrucciones">
+            <p>Para visualizar un PDF, simplemente haz clic en uno de los botones de arriba. El PDF se mostrará en el área de visualización abajo.</p>
+            <p>Si quieres guardar el PDF, sigue estos pasos:</p>
+            <ol>
+                <li>Haz clic en el botón de imprimir del visor de PDF.</li>
+                <li>En la ventana de impresión, selecciona la opción "Guardar como PDF".</li>
+                <li>Haz clic en "Guardar" y elige la ubicación donde deseas guardar el archivo.</li>
+            </ol>
+            <p><strong>Nota importante:</strong> Por favor, utiliza el navegador Google Chrome para abrir esta página. Aunque otros navegadores pueden funcionar, Google Chrome es el que asegura la mejor compatibilidad y experiencia de usuario. Si utilizas un navegador diferente, podrías experimentar errores o problemas de visualización. Para evitar inconvenientes, asegúrate de tener Google Chrome instalado y ábrelo desde allí.</p>
+            <p><strong>Formato de Fecha:</strong> En esta página se utiliza el formato de fecha de Estados Unidos. Es importante seguir este formato para evitar errores. El formato es MM-DD-YYYY, donde:</p>
+            <ul>
+                <li><strong>MM</strong>: Mes, representado por dos dígitos (por ejemplo, enero es "01", febrero es "02").</li>
+                <li><strong>DD</strong>: Día del mes, representado por dos dígitos (por ejemplo, el día 5 es "05").</li>
+                <li><strong>YYYY</strong>: Año, representado por cuatro dígitos (por ejemplo, 2025).</li>
+            </ul>
+            <p>Ejemplo: Para ingresar la fecha 10 de febrero de 2025, debes escribir "02-10-2025".</p>
+        </div>
+
+        <!-- Espacio para incrustar el PDF seleccionado -->
+        <iframe id="pdfViewer" src="" width="100%" height="500px"></iframe>
     </div>
-
-    <!-- Espacio para instrucciones -->
-    <div class="instrucciones">
-        <p>Para visualizar un PDF, simplemente haz clic en uno de los botones de arriba. El PDF se mostrará en el área de visualización abajo.</p>
-        <p>Si quieres guardar el PDF, sigue estos pasos:</p>
-        <ol>
-            <li>Haz clic en el botón de imprimir del visor de PDF.</li>
-            <li>En la ventana de impresión, selecciona la opción "Guardar como PDF".</li>
-            <li>Haz clic en "Guardar" y elige la ubicación donde deseas guardar el archivo.</li>
-        </ol>
-        <p><strong>Nota importante:</strong> Por favor, utiliza el navegador Google Chrome para abrir esta página. Aunque otros navegadores pueden funcionar, Google Chrome es el que asegura la mejor compatibilidad y experiencia de usuario. Si utilizas un navegador diferente, podrías experimentar errores o problemas de visualización. Para evitar inconvenientes, asegúrate de tener Google Chrome instalado y ábrelo desde allí.</p>
-        <p><strong>Formato de Fecha:</strong> En esta página se utiliza el formato de fecha de Estados Unidos. Es importante seguir este formato para evitar errores. El formato es MM-DD-YYYY, donde:</p>
-        <ul>
-            <li><strong>MM</strong>: Mes, representado por dos dígitos (por ejemplo, enero es "01", febrero es "02").</li>
-            <li><strong>DD</strong>: Día del mes, representado por dos dígitos (por ejemplo, el día 5 es "05").</li>
-            <li><strong>YYYY</strong>: Año, representado por cuatro dígitos (por ejemplo, 2025).</li>
-        </ul>
-        <p>Ejemplo: Para ingresar la fecha 10 de febrero de 2025, debes escribir "02-10-2025".</p>
-    </div>
-
-    <!-- Espacio para incrustar el PDF seleccionado -->
-    <iframe id="pdfViewer" src="" width="100%" height="500px"></iframe>
-
     <script>
         function visualizarPDF(pdfUrl) {
             // Muestra el PDF en el iframe
             document.getElementById('pdfViewer').src = pdfUrl;
+        }
+
+        function unirPDFs() {
+            // Abre la página para unir PDFs en una nueva pestaña
+            window.open('https://www.ilovepdf.com/es/unir_pdf', '_blank');
         }
     </script>
 </body>
