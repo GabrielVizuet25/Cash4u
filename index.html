@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Descargar PDF Automáticamente</title>
+    <title>Cotizadores CASH4U</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -12,43 +12,69 @@
         h1 {
             color: #333;
         }
-        iframe {
-            border: 1px solid #ccc;
-            margin-top: 20px;
+        .botones {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
         }
         button {
             padding: 10px 20px;
             font-size: 16px;
-            background-color: #007BFF;
+            background-color: #FFA500; /* Color naranja */
             color: white;
             border: none;
             cursor: pointer;
         }
         button:hover {
-            background-color: #0056b3;
+            background-color: #cc8400; /* Un tono más oscuro de naranja */
+        }
+        .instrucciones {
+            margin-top: 20px;
+            color: #555;
+        }
+        iframe {
+            border: 1px solid #ccc;
+            margin-top: 20px;
+            width: 100%;
+            height: 500px;
         }
     </style>
 </head>
 <body>
-    <h1> Cotizador CA$H4U PDF</h1>
-    <!-- Botón para descargar el PDF -->
-    <button onclick="descargarPDF()">Guardar PDF</button>
-    <br><br>
-    <!-- Incrusta el PDF en la página -->
-    <iframe id="pdfViewer" src="COTIZADOR INDIVIDUAL v2.0.pdf" width="100%" height="500px"></iframe>
+    <h1>Selecciona un PDF para visualizar</h1>
+    <!-- Botones para visualizar los PDFs -->
+    <div class="botones">
+        <button onclick="visualizarPDF('COTIZADOR INDIVIDUAL v2.0.pdf')">COTIZADOR INDIVIDUAL</button>
+        <button onclick="visualizarPDF('formulario2.pdf')">COTIZADOR CORRESIDENCIAL</button>
+        <button onclick="visualizarPDF('formulario3.pdf')">COTIZADOR CASH4ALL</button>
+    </div>
+
+    <!-- Espacio para instrucciones -->
+    <div class="instrucciones">
+        <p>Para visualizar un PDF, simplemente haz clic en uno de los botones de arriba. El PDF se mostrará en el área de visualización abajo.</p>
+        <p>Si quieres guardar el PDF, sigue estos pasos:</p>
+        <ol>
+            <li>Haz clic en el botón de imprimir del visor de PDF.</li>
+            <li>En la ventana de impresión, selecciona la opción "Guardar como PDF".</li>
+            <li>Haz clic en "Guardar" y elige la ubicación donde deseas guardar el archivo.</li>
+        </ol>
+        <p><strong>Nota importante:</strong> Por favor, utiliza el navegador Google Chrome para abrir esta página. Aunque otros navegadores pueden funcionar, Google Chrome es el que asegura la mejor compatibilidad y experiencia de usuario. Si utilizas un navegador diferente, podrías experimentar errores o problemas de visualización. Para evitar inconvenientes, asegúrate de tener Google Chrome instalado y ábrelo desde allí.</p>
+        <p><strong>Formato de Fecha:</strong> En esta página se utiliza el formato de fecha de Estados Unidos. Es importante seguir este formato para evitar errores. El formato es MM-DD-YYYY, donde:</p>
+        <ul>
+            <li><strong>MM</strong>: Mes, representado por dos dígitos (por ejemplo, enero es "01", febrero es "02").</li>
+            <li><strong>DD</strong>: Día del mes, representado por dos dígitos (por ejemplo, el día 5 es "05").</li>
+            <li><strong>YYYY</strong>: Año, representado por cuatro dígitos (por ejemplo, 2025).</li>
+        </ul>
+        <p>Ejemplo: Para ingresar la fecha 10 de febrero de 2025, debes escribir "02-10-2025".</p>
+    </div>
+
+    <!-- Espacio para incrustar el PDF seleccionado -->
+    <iframe id="pdfViewer" src="" width="100%" height="500px"></iframe>
 
     <script>
-        function descargarPDF() {
-            // Obtén la URL del PDF incrustado
-            const pdfUrl = document.getElementById('pdfViewer').src;
-
-            // Crea un enlace temporal para descargar el PDF
-            const link = document.createElement('a');
-            link.href = pdfUrl;
-            link.download = 'formulario_guardado.pdf'; // Nombre del archivo descargado
-            document.body.appendChild(link);
-            link.click(); // Simula el clic en el enlace
-            document.body.removeChild(link); // Elimina el enlace temporal
+        function visualizarPDF(pdfUrl) {
+            // Muestra el PDF en el iframe
+            document.getElementById('pdfViewer').src = pdfUrl;
         }
     </script>
 </body>
