@@ -107,6 +107,16 @@
         function visualizarPDF(pdfUrl) {
             // Muestra el PDF en el iframe
             document.getElementById('pdfViewer').src = pdfUrl;
+            // Esperar a que el iframe cargue su contenido
+    pdfViewer.onload = function() {
+        try {
+            // Intentar acceder al objeto window del iframe y aplicar zoom
+            pdfViewer.contentWindow.document.body.style.zoom = '140%';
+        } catch (e) {
+            console.error("No se pudo aplicar el zoom al PDF:", e);
+            alert("No se pudo establecer el zoom del PDF al 140% por defecto. Esto puede deberse a la configuración de tu navegador o a la forma en que se muestra el PDF.");
+        }
+    };
         }
 
         function unirPDFs() {
