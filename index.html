@@ -104,7 +104,6 @@
     <div class="content">
         <h2>Selecciona una opción:</h2>
         <div class="botones">
-          
             <button onclick="mostrarCalculadora()">CALCULADORA PRECALIFICACION COFINAVIT</button>
             <button onclick="visualizarPDF('COTIZADOR INDIVIDUAL v2.2.pdf')">COTIZADOR $180,000 A 240,000</button>
             <button onclick="visualizarPDF('COTIZADOR INDIVIDUAL v2.1.pdf')">COTIZADOR $240,000 A $1,350,000</button>
@@ -115,7 +114,7 @@
 
         <div id="calculadoraCofinavit" class="calculadora-container" style="display: none;">
             <h3>Calculadora Precalificación Cofinavit</h3>
-            <p>ingresa el saldo de subcuenta de tu cliente para calcular el resultado</p>
+            <p>Ingresa el saldo de subcuenta de tu cliente para calcular el resultado</p>
             <input type="number" id="montoInput" placeholder="Ej: 500000">
             <button onclick="calcularMonto()">Calcular</button>
             <p id="resultadoCalculadora"></p>
@@ -180,13 +179,17 @@
 
             if (isNaN(monto) || monto <= 0) {
                 mensaje = 'Por favor, ingresa un monto válido.';
+            // CAMBIO: Se agregó una condición para el límite máximo
+            } else if (monto > 1350000) {
+                mensaje = 'El límite para calcular es de $1,350,000 MXN.';
             } else if (monto >= 250000 && monto <= 299999) {
                 resultado = monto * 2;
             } else if (monto >= 300000 && monto <= 399999) {
                 resultado = monto + 250000;
             } else if (monto >= 400000 && monto <= 1000000) {
                 resultado = monto * 1.5;
-            } else if (monto >= 1050000) {
+            // CAMBIO: Se ajustó el rango final para incluir el límite
+            } else if (monto >= 1050000 && monto <= 1350000) {
                 resultado = monto + 500000;
             } else {
                 mensaje = 'El monto ingresado no aplica en los rangos de cálculo.';
@@ -200,7 +203,6 @@
                     style: 'currency',
                     currency: 'MXN'
                 });
-                // CAMBIO 3: Se actualizó la etiqueta del resultado
                 resultadoP.innerText = `Valor de casa: ${formatoMoneda}`;
             }
         }
