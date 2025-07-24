@@ -37,6 +37,7 @@
         }
         .botones {
             display: flex;
+            flex-wrap: wrap; /* Para que los botones se ajusten en pantallas pequeñas */
             gap: 10px;
             justify-content: center;
             margin-bottom: 20px;
@@ -64,6 +65,36 @@
             height: 500px;
             border-radius: 8px;
         }
+        /* --- ESTILOS PARA LA CALCULADORA --- */
+        .calculadora-container {
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-top: 20px;
+            background-color: #fafafa;
+        }
+        .calculadora-container input {
+            padding: 10px;
+            font-size: 18px;
+            width: calc(100% - 22px); /* Ajuste para el padding */
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .calculadora-container button {
+            width: 100%;
+            background-color: #007BFF;
+        }
+        .calculadora-container button:hover {
+            background-color: #0056b3;
+        }
+        #resultadoCalculadora {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007BFF;
+            text-align: center;
+            margin-top: 15px;
+        }
     </style>
 </head>
 <body>
@@ -71,51 +102,107 @@
         <h1>COTIZADORES PARA EJECUTIVOS CA$H4U</h1>
     </header>
     <div class="content">
-        <h2>Selecciona un PDF para editar: </h2>
-        <!-- Botones para visualizar los PDFs -->
+        <h2>Selecciona una opción:</h2>
         <div class="botones">
           
-            <button onclick="visualizarPDF('COTIZADOR INDIVIDUAL v2.2.pdf')">COTIZADOR PARA MONTOS DE $180,000 A 240,000</button>
-            <button onclick="visualizarPDF('COTIZADOR INDIVIDUAL v2.1.pdf')">COTIZADOR INDIVIDUAL MONTOS DE $240,000 A $1,350,000</button>
+            <button onclick="mostrarCalculadora()">CALCULADORA PRECALIFICACION COFINAVIT</button>
+            <button onclick="visualizarPDF('COTIZADOR INDIVIDUAL v2.2.pdf')">COTIZADOR $180,000 A 240,000</button>
+            <button onclick="visualizarPDF('COTIZADOR INDIVIDUAL v2.1.pdf')">COTIZADOR $240,000 A $1,350,000</button>
             <button onclick="visualizarPDF('COTIZADOR CORRESIDENCIAL v2.0.pdf')">COTIZADOR CORRESIDENCIAL</button>
             <button onclick="visualizarPDF('COTIZADOR CASH4ALL v2.0.pdf')">COTIZADOR CASH4ALL</button>
             <button onclick="unirPDFs()">UNIR PDFS</button>
         </div>
 
-        <!-- Espacio para instrucciones -->
-        <div class="instrucciones">
-            <p>Para visualizar un PDF, simplemente haz clic en uno de los botones de arriba. El PDF se mostrará en el área de visualización abajo.</p>
-            <p>Si quieres guardar el PDF, sigue estos pasos:</p>
-            <ol>
-                <li>Haz clic en el botón de imprimir del visor de PDF.</li>
-                <li>En la ventana de impresión, selecciona la opción "Guardar como PDF".</li>
-                <li>Haz clic en "Guardar" y elige la ubicación donde deseas guardar el archivo.</li>
-            </ol>
-            <p><strong>Nota importante:</strong> Por favor, utiliza el navegador Google Chrome para abrir esta página. Aunque otros navegadores pueden funcionar, Google Chrome es el que asegura la mejor compatibilidad y experiencia de usuario. Si utilizas un navegador diferente, podrías experimentar errores o problemas de visualización. Para evitar inconvenientes, asegúrate de tener Google Chrome instalado y ábrelo desde allí.</p>
-            <p><strong>Formato de Fecha:</strong> En esta página se utiliza el formato de fecha de Estados Unidos. Es importante seguir este formato para evitar errores. El formato es MM-DD-YYYY, donde:</p>
-            <ul>
-                <li><strong>MM</strong>: Mes, representado por dos dígitos (por ejemplo, enero es "01", febrero es "02").</li>
-                <li><strong>DD</strong>: Día del mes, representado por dos dígitos (por ejemplo, el día 5 es "05").</li>
-                <li><strong>YYYY</strong>: Año, representado por cuatro dígitos (por ejemplo, 2025).</li>
-            </ul>
-            <p>Ejemplo: Para ingresar la fecha 10 de febrero de 2025, debes escribir "02-10-2025".</p>
+        <div id="calculadoraCofinavit" class="calculadora-container" style="display: none;">
+            <h3>Calculadora Precalificación Cofinavit</h3>
+            <p>ingresa el saldo de subcuenta de tu cliente para calcular el resultado</p>
+            <input type="number" id="montoInput" placeholder="Ej: 500000">
+            <button onclick="calcularMonto()">Calcular</button>
+            <p id="resultadoCalculadora"></p>
         </div>
-
-        <!-- Espacio para incrustar el PDF seleccionado -->
-        <iframe id="pdfViewer" src="" width="100%" height="500px"></iframe>
+        
+        <div id="areaPdf">
+            <div class="instrucciones">
+                <p>Para visualizar un PDF, simplemente haz clic en uno de los botones de arriba. El PDF se mostrará en el área de visualización abajo.</p>
+                <p>Si quieres guardar el PDF, sigue estos pasos:</p>
+                <ol>
+                    <li>Haz clic en el botón de imprimir del visor de PDF.</li>
+                    <li>En la ventana de impresión, selecciona la opción "Guardar como PDF".</li>
+                    <li>Haz clic en "Guardar" y elige la ubicación donde deseas guardar el archivo.</li>
+                </ol>
+                <p><strong>Nota importante:</strong> Por favor, utiliza el navegador Google Chrome para abrir esta página. Aunque otros navegadores pueden funcionar, Google Chrome es el que asegura la mejor compatibilidad y experiencia de usuario. Si utilizas un navegador diferente, podrías experimentar errores o problemas de visualización. Para evitar inconvenientes, asegúrate de tener Google Chrome instalado y ábrelo desde allí.</p>
+                <p><strong>Formato de Fecha:</strong> En esta página se utiliza el formato de fecha de Estados Unidos. Es importante seguir este formato para evitar errores. El formato es MM-DD-YYYY, donde:</p>
+                <ul>
+                    <li><strong>MM</strong>: Mes, representado por dos dígitos (por ejemplo, enero es "01", febrero es "02").</li>
+                    <li><strong>DD</strong>: Día del mes, representado por dos dígitos (por ejemplo, el día 5 es "05").</li>
+                    <li><strong>YYYY</strong>: Año, representado por cuatro dígitos (por ejemplo, 2025).</li>
+                </ul>
+                <p>Ejemplo: Para ingresar la fecha 10 de febrero de 2025, debes escribir "02-10-2025".</p>
+            </div>
+    
+            <iframe id="pdfViewer" src="" width="100%" height="500px"></iframe>
+        </div>
     </div>
+
     <script>
-function visualizarPDF(pdfUrl) {
+        // Obtener referencias a los elementos que vamos a mostrar/ocultar
+        const calculadoraDiv = document.getElementById('calculadoraCofinavit');
+        const pdfDiv = document.getElementById('areaPdf');
+        const resultadoP = document.getElementById('resultadoCalculadora');
 
-            // Muestra el PDF en el iframe
+        function mostrarCalculadora() {
+            // Oculta el área del PDF y muestra la calculadora
+            pdfDiv.style.display = 'none';
+            calculadoraDiv.style.display = 'block';
+            // Limpia el resultado anterior
+            resultadoP.innerText = '';
+            document.getElementById('montoInput').value = '';
+        }
 
-            document.getElementById('pdfViewer').src = pdfUrl;
-
-        }
+        function visualizarPDF(pdfUrl) {
+            // Oculta la calculadora y muestra el área del PDF
+            calculadoraDiv.style.display = 'none';
+            pdfDiv.style.display = 'block';
+            // Muestra el PDF en el iframe
+            document.getElementById('pdfViewer').src = pdfUrl;
+        }
 
         function unirPDFs() {
             // Abre la página para unir PDFs en una nueva pestaña
             window.open('https://www.ilovepdf.com/es/unir_pdf', '_blank');
+        }
+
+        function calcularMonto() {
+            const input = document.getElementById('montoInput');
+            const monto = parseFloat(input.value);
+            let resultado = 0;
+            let mensaje = '';
+
+            if (isNaN(monto) || monto <= 0) {
+                mensaje = 'Por favor, ingresa un monto válido.';
+            } else if (monto >= 250000 && monto <= 299999) {
+                resultado = monto * 2;
+            } else if (monto >= 300000 && monto <= 399999) {
+                resultado = monto + 250000;
+            } else if (monto >= 400000 && monto <= 1000000) {
+                resultado = monto * 1.5;
+            } else if (monto >= 1050000) {
+                resultado = monto + 500000;
+            } else {
+                mensaje = 'El monto ingresado no aplica en los rangos de cálculo.';
+            }
+            
+            if (mensaje) {
+                resultadoP.innerText = mensaje;
+            } else {
+                // Formatear el resultado como moneda (pesos mexicanos)
+                const formatoMoneda = resultado.toLocaleString('es-MX', {
+                    style: 'currency',
+                    currency: 'MXN'
+                });
+                // CAMBIO 3: Se actualizó la etiqueta del resultado
+                resultadoP.innerText = `Valor de casa: ${formatoMoneda}`;
+            }
         }
     </script>
 </body>
