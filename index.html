@@ -13,7 +13,7 @@
         h1 { margin: 0; font-size: 1.5em; }
         .content { width: 95%; max-width: 1000px; margin: 20px auto; padding: 0; }
 
-        /* --- ESTILOS DEL MENÚ PRINCIPAL --- */
+        /* --- MENÚ PRINCIPAL --- */
         .menu-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; padding: 20px; }
         .menu-card { background: white; border-radius: 10px; padding: 25px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: transform 0.3s ease, box-shadow 0.3s ease; border-top: 5px solid #FF7F00; display: flex; flex-direction: column; justify-content: space-between; }
         .menu-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
@@ -24,7 +24,7 @@
         .btn-dark { background-color: #333; }
         .btn-dark:hover { background-color: #555; }
 
-        /* --- ESTILOS DEL FORMULARIO --- */
+        /* --- FORMULARIO --- */
         .form-container { background-color: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); display: none; margin: 20px; position: relative; }
         .btn-back { background-color: transparent; color: #666; border: 1px solid #ccc; padding: 8px 15px; border-radius: 5px; cursor: pointer; margin-bottom: 20px; display: inline-flex; align-items: center; gap: 5px; font-weight: bold; }
         .btn-back:hover { background-color: #f0f0f0; color: #333; }
@@ -37,17 +37,29 @@
         .section-title { grid-column: span 2; border-bottom: 2px solid #FF7F00; margin-top: 20px; margin-bottom: 10px; padding-bottom: 5px; color: #FF7F00; font-weight: bold; }
         .btn-action { background-color: #007BFF; width: 100%; margin-top: 20px; font-size: 18px; font-weight: bold; padding: 15px; border: none; color: white; border-radius: 5px; cursor: pointer; }
         .btn-action:hover { background-color: #0056b3; }
-        .alerta { color: red; font-weight: bold; font-size: 0.9em; margin-top: 5px; display: none; }
+        
+        /* Alerta estilo Banner */
+        .alerta { 
+            background-color: #ffe6e6; 
+            color: #d8000c; 
+            border: 1px solid #d8000c; 
+            padding: 10px; 
+            border-radius: 5px; 
+            font-weight: bold; 
+            margin-top: 10px; 
+            display: none; /* Oculto por defecto */
+            text-align: center;
+        }
         .plusvalia-style input { color: #28a745; border-color: #28a745; font-weight: bold; }
         .plusvalia-style label { color: #28a745; }
 
-        /* --- ESTILOS DEL AVISO (MODAL) --- */
+        /* --- MODAL --- */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 1000; }
         .modal-box { background: white; padding: 30px; border-radius: 10px; text-align: center; max-width: 300px; width: 90%; box-shadow: 0 10px 25px rgba(0,0,0,0.2); animation: popIn 0.3s ease; }
         .modal-icon { font-size: 50px; color: #28a745; margin-bottom: 15px; }
         .modal-btn { background-color: #28a745; color: white; border: none; padding: 10px 25px; border-radius: 5px; cursor: pointer; font-size: 16px; margin-top: 15px; }
-        
         @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
         @media (max-width: 600px) {
             .form-grid { grid-template-columns: 1fr; }
             .full-width { grid-column: span 1; }
@@ -67,7 +79,7 @@
             <div class="menu-card">
                 <div>
                     <h3>Cotizador TIPO I</h3>
-                    <p>Diseñado para operaciones con un valor entre <strong>$180,000 y $375,000 MXN</strong>.</p>
+                    <p>Rango exclusivo:<br><strong>$180,000 - $325,000 MXN</strong>.</p>
                     <p style="font-size: 0.8em; color: #888;">*Cálculo estándar sin plusvalía.</p>
                 </div>
                 <button class="btn-menu" onclick="iniciarCotizador('tipo1')">Ingresar al Tipo I</button>
@@ -76,7 +88,7 @@
             <div class="menu-card">
                 <div>
                     <h3>Cotizador TIPO II</h3>
-                    <p>Diseñado para operaciones de <strong>$325,000 MXN en adelante</strong>.</p>
+                    <p>Rango exclusivo:<br><strong>$325,000 - $1,350,000 MXN</strong>.</p>
                     <p style="font-size: 0.8em; color: #28a745;">*Incluye cálculo de Plusvalía (3%).</p>
                 </div>
                 <button class="btn-menu" onclick="iniciarCotizador('tipo2')">Ingresar al Tipo II</button>
@@ -106,7 +118,10 @@
                 <div class="full-width">
                     <label>VALOR DE OPERACIÓN ($):</label>
                     <input type="number" id="inp_valor" placeholder="Ingresa monto..." oninput="calcularDesglose()">
-                    <div id="alertaRango" class="alerta">⚠️ Monto fuera de rango para este cotizador.</div>
+                    <div id="alertaRango" class="alerta">
+                        ⚠️ MONTO FUERA DE RANGO.<br>
+                        <span style="font-weight:normal; font-size:0.9em;">Verifica el cotizador seleccionado.</span>
+                    </div>
                 </div>
 
                 <div id="row_plusvalia" class="plusvalia-style" style="display: none;">
@@ -134,7 +149,7 @@
                 <div><label>Teléfono:</label><input type="text" id="inp_telefono" readonly></div>
             </div>
             
-            <button class="btn-action" onclick="generarPDF()">📄 GENERAR PDF FINAL</button>
+            <button id="btnGenerar" class="btn-action" onclick="generarPDF()">📄 GENERAR PDF FINAL</button>
         </div>
     </div>
 
@@ -149,12 +164,29 @@
     </div>
 
     <script>
+        // --- CONFIGURACIÓN DE RANGOS ESTRICTA ---
+        const configuracion = {
+            'tipo1': {
+                pdf: 'Tipo 1.pdf',   
+                titulo: 'Cotizador TIPO I',
+                min: 180000,
+                max: 325000 // <--- TOPE ESTRICTO TIPO 1
+            },
+            'tipo2': {
+                pdf: 'Tipo 2.pdf',   
+                titulo: 'Cotizador TIPO II',
+                min: 325000,
+                max: 1350000 // <--- TOPE ESTRICTO TIPO 2
+            }
+        };
+
         let tipoActual = ""; 
         let pdfUrl = "";
         const divMenu = document.getElementById('menuPrincipal');
         const divForm = document.getElementById('formularioWeb');
         const rowPlusvalia = document.getElementById('row_plusvalia');
         const alerta = document.getElementById('alertaRango');
+        const btnGenerar = document.getElementById('btnGenerar');
         const modal = document.getElementById('modalExito');
 
         // --- DATOS EJECUTIVOS ---
@@ -196,21 +228,6 @@
             document.getElementById('inp_telefono').value = ejecutivo ? ejecutivo.tel : "";
         }
 
-        const configuracion = {
-            'tipo1': {
-                pdf: 'Tipo 1.pdf',   
-                titulo: 'Cotizador TIPO I',
-                min: 180000,
-                max: 375000
-            },
-            'tipo2': {
-                pdf: 'Tipo 2.pdf',   
-                titulo: 'Cotizador TIPO II',
-                min: 325000,
-                max: 99999999
-            }
-        };
-
         function iniciarCotizador(tipo) {
             tipoActual = tipo;
             const config = configuracion[tipo];
@@ -220,7 +237,7 @@
             pdfUrl = config.pdf;
             
             const rInfo = document.getElementById('rangoInfo');
-            rInfo.innerText = `Rango válido: ${formatoDinero(config.min)} ${config.max > 5000000 ? 'en adelante' : 'a ' + formatoDinero(config.max)}`;
+            rInfo.innerText = `Rango permitido: ${formatoDinero(config.min)} a ${formatoDinero(config.max)}`;
 
             if (tipo === 'tipo1') rowPlusvalia.style.display = 'none';
             else rowPlusvalia.style.display = 'block';
@@ -239,42 +256,64 @@
             document.getElementById('inp_valor').value = '';
             document.getElementById('inp_porcentaje_descuento').value = '0';
             document.getElementById('inp_neto').value = '';
+            document.getElementById('inp_plusvalia').value = '';
+            document.getElementById('inp_costos_compra').value = '';
+            document.getElementById('inp_costos_venta').value = '';
+            document.getElementById('inp_honorarios').value = '';
             document.getElementById('inp_fecha').value = new Date().toISOString().split('T')[0];
             alerta.style.display = 'none';
+            btnGenerar.disabled = false;
+            btnGenerar.style.opacity = "1";
         }
 
-        function cerrarModal() {
-            modal.style.display = 'none';
-        }
+        function cerrarModal() { modal.style.display = 'none'; }
 
+        // --- LÓGICA MAESTRA (CON BLOQUEO DE RANGO) ---
         function calcularDesglose() {
             const valorInput = parseFloat(document.getElementById('inp_valor').value) || 0;
             const porcentajeInput = parseFloat(document.getElementById('inp_porcentaje_descuento').value) || 0;
             const porcentajeDecimal = porcentajeInput / 100; 
+            const config = configuracion[tipoActual];
 
+            // --- 1. VALIDACIÓN DE RANGO ESTRICTA ---
+            if (valorInput > 0 && (valorInput < config.min || valorInput > config.max)) {
+                // SI ESTÁ FUERA DE RANGO:
+                alerta.style.display = 'block'; // Muestra banner
+                btnGenerar.disabled = true;     // Bloquea botón PDF
+                btnGenerar.style.opacity = "0.5";
+                
+                // Limpia cálculos para no confundir
+                document.getElementById('inp_neto').value = "$0.00";
+                document.getElementById('inp_costos_compra').value = "";
+                document.getElementById('inp_costos_venta').value = "";
+                document.getElementById('inp_honorarios').value = "";
+                return; // <--- DETIENE LA EJECUCIÓN AQUÍ
+            } else {
+                // SI ESTÁ BIEN:
+                alerta.style.display = 'none';
+                btnGenerar.disabled = false;
+                btnGenerar.style.opacity = "1";
+            }
+
+            // --- 2. CÁLCULOS SI EL RANGO ES CORRECTO ---
             let costosCompra = 0;
             let costosVenta = 0;
             let honorariosBase = 0;
             let plusvalia = 0;
 
-            const config = configuracion[tipoActual];
-            if (valorInput > 0 && (valorInput < config.min || (config.max < 5000000 && valorInput > config.max))) {
-                alerta.style.display = 'block';
-            } else {
-                alerta.style.display = 'none';
-            }
-
+            // --- TIPO 1 (180k - 325k) ---
             if (tipoActual === 'tipo1') {
                 plusvalia = 0;
                 if (valorInput >= 180000 && valorInput < 325000) {
                     costosCompra = 18000; costosVenta = 7250; honorariosBase = 43000;
-                } else if (valorInput >= 325000 && valorInput <= 375000) {
-                    costosCompra = 20000; costosVenta = 7750; honorariosBase = 50000;
-                }
+                } 
+                // Ya no hay más rangos en Tipo 1
             }
+            // --- TIPO 2 (325k - 1.35M) ---
             else if (tipoActual === 'tipo2') {
                 if (valorInput >= 325000) {
                     plusvalia = valorInput * 0.03;
+                    
                     if (valorInput >= 325000 && valorInput < 375000) { costosCompra = 36000; costosVenta = 14500; honorariosBase = 50000; }
                     else if (valorInput >= 375000 && valorInput < 450000) { costosCompra = 36000; costosVenta = 14500; honorariosBase = 55000; }
                     else if (valorInput >= 450000 && valorInput < 500000) { costosCompra = 38000; costosVenta = 17000; honorariosBase = 59000; }
@@ -284,8 +323,8 @@
                     else if (valorInput >= 950000 && valorInput < 1010000) { costosCompra = 61000; costosVenta = 17000; honorariosBase = 109000; }
                     else if (valorInput >= 1010000 && valorInput < 1150000) { costosCompra = 75000; costosVenta = 17000; honorariosBase = 121000; }
                     else if (valorInput >= 1150000 && valorInput < 1350000) { costosCompra = 75000; costosVenta = 17000; honorariosBase = 135000; }
-                    else if (valorInput >= 1350000 && valorInput < 1550000) { costosCompra = 88000; costosVenta = 17000; honorariosBase = 155000; }
-                    else if (valorInput >= 1550000) { costosCompra = 88000; costosVenta = 18500; honorariosBase = 178000; }
+                    // Limite superior 1.35M, si pasa, el validador de arriba lo bloquea antes de llegar aquí
+                    else if (valorInput >= 1350000) { costosCompra = 88000; costosVenta = 17000; honorariosBase = 155000; }
                 }
             }
 
@@ -354,11 +393,8 @@
                 }
 
                 form.flatten(); 
-
                 const pdfBytes = await pdfDoc.save();
                 download(pdfBytes, `Cotizacion_${mapDatos['Cliente']}.pdf`, "application/pdf");
-                
-                // AVISO DE ÉXITO
                 modal.style.display = 'flex';
 
             } catch (error) { console.error(error); alert("Error: Verifica nombre del PDF."); }
