@@ -11,73 +11,29 @@
         body { font-family: 'Helvetica Neue', Arial, sans-serif; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; background-color: #f4f4f4; color: #333; }
         header { width: 100%; background-color: #FF7F00; padding: 20px 0; text-align: center; color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         h1 { margin: 0; font-size: 1.5em; }
-        
         .content { width: 95%; max-width: 1000px; margin: 20px auto; padding: 0; }
 
-        /* --- ESTILOS DEL MENÚ PRINCIPAL (TARJETAS) --- */
-        .menu-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            padding: 20px;
-        }
-
-        .menu-card {
-            background: white;
-            border-radius: 10px;
-            padding: 25px;
-            text-align: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border-top: 5px solid #FF7F00;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .menu-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-        }
-
+        /* --- ESTILOS DEL MENÚ PRINCIPAL --- */
+        .menu-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; padding: 20px; }
+        .menu-card { background: white; border-radius: 10px; padding: 25px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: transform 0.3s ease, box-shadow 0.3s ease; border-top: 5px solid #FF7F00; display: flex; flex-direction: column; justify-content: space-between; }
+        .menu-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
         .menu-card h3 { color: #FF7F00; margin-top: 0; font-size: 1.4em; }
         .menu-card p { color: #666; line-height: 1.5; font-size: 0.95em; margin-bottom: 20px; }
-        
-        .btn-menu {
-            background-color: #FF7F00; color: white; border: none; padding: 12px; 
-            width: 100%; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 1em;
-            transition: background 0.3s;
-        }
+        .btn-menu { background-color: #FF7F00; color: white; border: none; padding: 12px; width: 100%; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 1em; transition: background 0.3s; }
         .btn-menu:hover { background-color: #e67000; }
-        
-        /* Botón especial para Unir PDFs */
         .btn-dark { background-color: #333; }
         .btn-dark:hover { background-color: #555; }
 
-        /* --- ESTILOS DEL FORMULARIO (COTIZADOR) --- */
-        .form-container { 
-            background-color: white; padding: 30px; border-radius: 8px; 
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1); display: none; /* Oculto al inicio */
-            margin: 20px;
-            position: relative;
-        }
-        
-        /* Botón Regresar */
-        .btn-back {
-            background-color: transparent; color: #666; border: 1px solid #ccc;
-            padding: 8px 15px; border-radius: 5px; cursor: pointer; margin-bottom: 20px;
-            display: inline-flex; align-items: center; gap: 5px; font-weight: bold;
-        }
+        /* --- ESTILOS DEL FORMULARIO --- */
+        .form-container { background-color: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); display: none; margin: 20px; position: relative; }
+        .btn-back { background-color: transparent; color: #666; border: 1px solid #ccc; padding: 8px 15px; border-radius: 5px; cursor: pointer; margin-bottom: 20px; display: inline-flex; align-items: center; gap: 5px; font-weight: bold; }
         .btn-back:hover { background-color: #f0f0f0; color: #333; }
-
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .full-width { grid-column: span 2; }
-        
         label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 0.9em; color: #555; }
         input[readonly], select { background-color: #e9ecef; color: #495057; font-weight: bold; border: 1px solid #ccc; }
         select { background-color: #fff; cursor: pointer; }
         input { padding: 10px; font-size: 16px; width: 100%; box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px; }
-        
         .section-title { grid-column: span 2; border-bottom: 2px solid #FF7F00; margin-top: 20px; margin-bottom: 10px; padding-bottom: 5px; color: #FF7F00; font-weight: bold; }
         .btn-action { background-color: #007BFF; width: 100%; margin-top: 20px; font-size: 18px; font-weight: bold; padding: 15px; border: none; color: white; border-radius: 5px; cursor: pointer; }
         .btn-action:hover { background-color: #0056b3; }
@@ -85,6 +41,13 @@
         .plusvalia-style input { color: #28a745; border-color: #28a745; font-weight: bold; }
         .plusvalia-style label { color: #28a745; }
 
+        /* --- ESTILOS DEL AVISO (MODAL) --- */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 1000; }
+        .modal-box { background: white; padding: 30px; border-radius: 10px; text-align: center; max-width: 300px; width: 90%; box-shadow: 0 10px 25px rgba(0,0,0,0.2); animation: popIn 0.3s ease; }
+        .modal-icon { font-size: 50px; color: #28a745; margin-bottom: 15px; }
+        .modal-btn { background-color: #28a745; color: white; border: none; padding: 10px 25px; border-radius: 5px; cursor: pointer; font-size: 16px; margin-top: 15px; }
+        
+        @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         @media (max-width: 600px) {
             .form-grid { grid-template-columns: 1fr; }
             .full-width { grid-column: span 1; }
@@ -129,10 +92,7 @@
         </div>
 
         <div id="formularioWeb" class="form-container">
-            
-            <button class="btn-back" onclick="regresarMenu()">
-                <span>⬅</span> Regresar al Menú
-            </button>
+            <button class="btn-back" onclick="regresarMenu()"><span>⬅</span> Regresar al Menú</button>
 
             <h3 id="tituloFormulario" style="text-align: center; color: #333; margin-top: 0;">Cotización</h3>
             <p id="rangoInfo" style="text-align: center; color: #666; font-style: italic; margin-bottom: 25px;"></p>
@@ -178,18 +138,26 @@
         </div>
     </div>
 
+    <div id="modalExito" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-icon">✅</div>
+            <h3>¡Descarga Lista!</h3>
+            <p style="margin-bottom: 10px;">Tu cotización se ha generado correctamente.</p>
+            <p style="font-size: 0.85em; color: #666;">Revisa tu carpeta de <strong>Descargas</strong> o Archivos.</p>
+            <button class="modal-btn" onclick="cerrarModal()">Entendido</button>
+        </div>
+    </div>
+
     <script>
-        // --- VARIABLES DE ESTADO ---
         let tipoActual = ""; 
         let pdfUrl = "";
-        
-        // Referencias DOM
         const divMenu = document.getElementById('menuPrincipal');
         const divForm = document.getElementById('formularioWeb');
         const rowPlusvalia = document.getElementById('row_plusvalia');
         const alerta = document.getElementById('alertaRango');
+        const modal = document.getElementById('modalExito');
 
-        // --- BASE DE DATOS EJECUTIVOS ---
+        // --- DATOS EJECUTIVOS ---
         const listaEjecutivos = [
             { nombre: "Ana Catalina Dergal", correo: "katian.d@cash4u.com.mx", tel: "5510099363" },
             { nombre: "Claudia Pinedo Poch", correo: "claudia.p@cash4u.com.mx", tel: "5525614296" },
@@ -211,7 +179,6 @@
             { nombre: "Omar Charfen", correo: "omar.charfen@cash4u.com.mx", tel: "5566549935" }
         ];
 
-        // Llenar Select
         (function llenarSelectEjecutivos() {
             const select = document.getElementById('inp_ejecutivo');
             listaEjecutivos.forEach(ejec => {
@@ -229,7 +196,6 @@
             document.getElementById('inp_telefono').value = ejecutivo ? ejecutivo.tel : "";
         }
 
-        // --- CONFIGURACIÓN PDF ---
         const configuracion = {
             'tipo1': {
                 pdf: 'Tipo 1.pdf',   
@@ -245,15 +211,11 @@
             }
         };
 
-        // --- NAVEGACIÓN: MOSTRAR COTIZADOR ---
         function iniciarCotizador(tipo) {
             tipoActual = tipo;
             const config = configuracion[tipo];
-            
-            // Ocultar Menú, Mostrar Form
             divMenu.style.display = 'none';
             divForm.style.display = 'block';
-            
             document.getElementById('tituloFormulario').innerText = config.titulo;
             pdfUrl = config.pdf;
             
@@ -267,10 +229,9 @@
             calcularDesglose(); 
         }
 
-        // --- NAVEGACIÓN: REGRESAR AL MENÚ ---
         function regresarMenu() {
             divForm.style.display = 'none';
-            divMenu.style.display = 'grid'; // o flex, grid es mejor para las tarjetas
+            divMenu.style.display = 'grid';
             limpiarCampos();
         }
 
@@ -280,10 +241,12 @@
             document.getElementById('inp_neto').value = '';
             document.getElementById('inp_fecha').value = new Date().toISOString().split('T')[0];
             alerta.style.display = 'none';
-            // No limpiamos el ejecutivo para no ser molestos si el usuario hace varias cotizaciones seguidas
         }
 
-        // --- CÁLCULOS ---
+        function cerrarModal() {
+            modal.style.display = 'none';
+        }
+
         function calcularDesglose() {
             const valorInput = parseFloat(document.getElementById('inp_valor').value) || 0;
             const porcentajeInput = parseFloat(document.getElementById('inp_porcentaje_descuento').value) || 0;
@@ -394,6 +357,10 @@
 
                 const pdfBytes = await pdfDoc.save();
                 download(pdfBytes, `Cotizacion_${mapDatos['Cliente']}.pdf`, "application/pdf");
+                
+                // AVISO DE ÉXITO
+                modal.style.display = 'flex';
+
             } catch (error) { console.error(error); alert("Error: Verifica nombre del PDF."); }
         }
 
