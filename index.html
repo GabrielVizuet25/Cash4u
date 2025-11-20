@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cotizadores CASH4U</title>
+    <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+    
+    <style>
+        /* ESTILOS VISUALES */
+        body { font-family: 'Helvetica Neue', Arial, sans-serif; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; background-color: #f4f4f4; color: #333; }
+        header { width: 100%; background-color: #FF7F00; padding: 20px 0; text-align: center; color: white; }
+        h1 { margin: 0; font-size: 1.5em; }
+        .content { width: 95%; max-width: 1000px; margin: 20px auto; padding: 15px; background-color: white; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 8px; }
+        
+        .botones { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 20px; }
+        button { padding: 12px; font-size: 14px; background-color: #FF7F00; color: white; border: none; cursor: pointer; border-radius: 5px; flex: 1 1 auto; min-width: 150px; }
+        button:hover { background-color: #e67000; }
+
+        .form-container { padding: 20px; border: 1px solid #ddd; border-radius: 8px; margin-top: 10px; background-color: #fafafa; display: none; }
+        
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .full-width { grid-column: span 2; }
+        
+        label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 0.9em; color: #555; }
+        /* Inputs de lectura (gris) */
+        input[readonly], select { background-color: #e9ecef; color: #495057; font-weight: bold; border: 1px solid #ccc; }
+        /* El select debe parecer editable */
+        select { background-color: #fff; cursor: pointer; }
+        
+        input { padding: 10px; font-size: 16px; width: 100%; box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px; }
+        
+        .section-title { grid-column: span 2; border-bottom: 2px solid #FF7F00; margin-top: 20px; margin-bottom: 10px; padding-bottom: 5px; color: #FF7F00; font-weight: bold; }
+        .btn-action { background-color: #007BFF; width: 100%; margin-top: 20px; font-size: 18px; font-weight: bold; padding: 15px; }
+        .btn-action:hover { background-color: #0056b3; }
+        .alerta { color: red; font-weight: bold; font-size: 0.9em; margin-top: 5px; display: none; }
+        .plusvalia-style input { color: #28a745; border-color: #28a745; font-weight: bold; }
+        .plusvalia-style label { color: #28a745; }
+
+        @media (max-width: 600px) {
+            .form-grid { grid-template-columns: 1fr; }
+            .full-width { grid-column: span 1; }
+            .section-title { grid-column: span 1; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>COTIZADORES EJECUTIVOS CA$H4U</h1>
+    </header>
+
+    <div class="content">
+        <div class="botones">
+            <button onclick="iniciarCotizador('tipo1')">COTIZADOR TIPO I ($180k - $375k)</button>
+            <button onclick="iniciarCotizador('tipo2')">COTIZADOR TIPO II (Plusvalía)</button>
+            <button onclick="unirPDFs()" style="background-color: #333;">UNIR PDFS</button>
+        </div>
+        
+        <div id="formularioWeb" class="form-container">
+            <h3 id="tituloFormulario" style="text-align: center; color: #333;">Cotización</h3>
+            <p id="rangoInfo" style="text-align: center; color: #666; font-style: italic;"></p>
+            
+            <div class="form-grid">
+                <div class="section-title">1. Datos del Cliente</div>
+                <div class="full-width"><label>Nombre del Cliente:</label><input type="text" id="inp_cliente"></div>
+                <div><label>Fecha:</label><input type="date" id="inp_fecha"></div>
+
+                <div class="section-title">2. Datos Financieros</div>
+                <div class="full-width">
+                    <label>VALOR DE OPERACIÓN ($):</label>
+                    <input type="number" id="inp_valor" placeholder="Ingresa monto..." oninput="calcularDesglose()">
+                    <div id="alertaRango" class="alerta">⚠️ Monto fuera de rango para este cotizador.</div>
+                </div>
+
+                <div id="row_plusvalia" class="plusvalia-style" style="display: none;">
+                    <label>Plusvalía (+):</label><input type="text" id="inp_plusvalia" readonly>
+                </div>
+                
+                <div><label>Costos Compra (-):</label><input type="text" id="inp_costos_compra" readonly></div>
+                <div><label>Costos Venta (-):</label><input type="text" id="inp_costos_venta" readonly></div>
+                <div><label>Honorarios (Base) (-):</label><input type="text" id="inp_honorarios" readonly></div>
+                <div><label>Descuento Honorarios (%):</label><input type="number" id="inp_porcentaje_descuento" value="0" placeholder="0" oninput="calcularDesglose()"></div>
+                <div class="full-width"><label>Detalle Descuento:</label><input type="text" id="inp_leyenda_descuento" readonly style="font-style: italic; color: #d9534f;"></div>
+                <div class="full-width" style="background-color: #e3f2fd; padding: 10px; border-radius: 5px;">
+                    <label style="color: #007BFF; font-size: 1.1em;">NETO A RECIBIR (=):</label>
+                    <input type="text" id="inp_neto" readonly style="font-size: 1.5em; color: #007BFF; border: 2px solid #007BFF;">
+                </div>
+
+                <div class="section-title">3. Datos del Ejecutivo</div>
+                <div class="full-width">
+                    <label>Nombre Ejecutivo:</label>
+                    <select id="inp_ejecutivo" onchange="cargarDatosEjecutivo()">
+                        <option value="">Selecciona un ejecutivo...</option>
+                    </select>
+                </div>
+                <div><label>Correo:</label><input type="text" id="inp_correo" readonly></div>
+                <div><label>Teléfono:</label><input type="text" id="inp_telefono" readonly></div>
+            </div>
+            
+            <button class="btn-action" onclick="generarPDF()">📄 GENERAR PDF</button>
+        </div>
+    </div>
+
+    <script>
+        let tipoActual = ""; 
+        let pdfUrl = "";
+        const divForm = document.getElementById('formularioWeb');
+        const rowPlusvalia = document.getElementById('row_plusvalia');
+        const alerta = document.getElementById('alertaRango');
+
+        // --- BASE DE DATOS DE EJECUTIVOS (Copiada de tu imagen) ---
+        const listaEjecutivos = [
+            { nombre: "Ana Catalina Dergal", correo: "katian.d@cash4u.com.mx", tel: "5510099363" },
+            { nombre: "Claudia Pinedo Poch", correo: "claudia.p@cash4u.com.mx", tel: "5525614296" },
+            { nombre: "Cristina Rondán Álvarez", correo: "cristina.r@cash4u.com.mx", tel: "5555088136" },
+            { nombre: "Gabriela Reyes", correo: "gabriela.r@cash4u.com.mx", tel: "5521096025" },
+            { nombre: "Isabel Gómez Diez", correo: "isabel.g@cash4u.com.mx", tel: "5575050464" },
+            { nombre: "Jimena Romero", correo: "jimena.r@cash4u.com.mx", tel: "5516981746" },
+            { nombre: "Jose Berlanga", correo: "jose.b@cash4u.com.mx", tel: "" }, 
+            { nombre: "Karla Ibarrola Torres", correo: "karla.i@cash4u.com.mx", tel: "5514745220" },
+            { nombre: "Loren Ramos Portilla", correo: "loren.ramos@cash4u.com.mx", tel: "5521368938" },
+            { nombre: "María Laura Laisequilla Ceballos", correo: "mlaura.laisequilla@cash4.com.mx", tel: "4427909237" },
+            { nombre: "Martha Georgina García Díaz", correo: "georgina.garcia@cash4u.com.mx", tel: "5522474411" },
+            { nombre: "Mauricio Garza Castro", correo: "mauricio.g@cash4u.com.mx", tel: "5543577436" },
+            { nombre: "Mercedes Wilson Fernandez", correo: "m.wilson@cash4u.com.mx", tel: "5554368020" },
+            { nombre: "Roberto Moreno Castillo", correo: "roberto.moreno@cash4u.com.mx", tel: "5539992770" },
+            { nombre: "Sandra Martínez", correo: "sandra.m@cash4u.com.mx", tel: "5554332704" },
+            { nombre: "Sergio Navarro Diaz De La Vega", correo: "sergio.n@cash4u.com.mx", tel: "5548905695" },
+            { nombre: "Verónica Elizabeth Gómez García", correo: "veronica.gomez.g@cash4u.com.mx", tel: "4421316342" },
+            { nombre: "Omar Charfen", correo: "omar.charfen@cash4u.com.mx", tel: "5566549935" }
+        ];
+
+        // --- INICIALIZAR LA LISTA DESPLEGABLE ---
+        // Esto se ejecuta apenas carga la página para llenar el <select>
+        (function llenarSelectEjecutivos() {
+            const select = document.getElementById('inp_ejecutivo');
+            listaEjecutivos.forEach(ejec => {
+                const option = document.createElement('option');
+                option.value = ejec.nombre;
+                option.text = ejec.nombre;
+                select.appendChild(option);
+            });
+        })();
+
+        // --- FUNCIÓN: RELLENAR DATOS AL SELECCIONAR ---
+        function cargarDatosEjecutivo() {
+            const nombreSeleccionado = document.getElementById('inp_ejecutivo').value;
+            const inputCorreo = document.getElementById('inp_correo');
+            const inputTel = document.getElementById('inp_telefono');
+
+            // Buscar en la lista
+            const ejecutivo = listaEjecutivos.find(e => e.nombre === nombreSeleccionado);
+
+            if (ejecutivo) {
+                inputCorreo.value = ejecutivo.correo;
+                inputTel.value = ejecutivo.tel;
+            } else {
+                inputCorreo.value = "";
+                inputTel.value = "";
+            }
+        }
+
+        const configuracion = {
+            'tipo1': {
+                pdf: 'Tipo 1.pdf',   
+                titulo: 'Cotización Tipo I ($180k - $375k)',
+                min: 180000,
+                max: 375000
+            },
+            'tipo2': {
+                pdf: 'Tipo 2.pdf',   
+                titulo: 'Cotización Tipo II ($325k - $1.55M+)',
+                min: 325000,
+                max: 99999999
+            }
+        };
+
+        function iniciarCotizador(tipo) {
+            tipoActual = tipo;
+            const config = configuracion[tipo];
+            divForm.style.display = 'block';
+            document.getElementById('tituloFormulario').innerText = config.titulo;
+            pdfUrl = config.pdf;
+            
+            const rInfo = document.getElementById('rangoInfo');
+            rInfo.innerText = `Rango válido: ${formatoDinero(config.min)} ${config.max > 5000000 ? 'en adelante' : 'a ' + formatoDinero(config.max)}`;
+
+            if (tipo === 'tipo1') rowPlusvalia.style.display = 'none';
+            else rowPlusvalia.style.display = 'block';
+
+            // Limpiar campos básicos (no limpiamos el ejecutivo para comodidad)
+            document.getElementById('inp_valor').value = '';
+            document.getElementById('inp_porcentaje_descuento').value = '0';
+            document.getElementById('inp_neto').value = '';
+            document.getElementById('inp_fecha').value = new Date().toISOString().split('T')[0];
+            alerta.style.display = 'none';
+            calcularDesglose(); 
+        }
+
+        function calcularDesglose() {
+            const valorInput = parseFloat(document.getElementById('inp_valor').value) || 0;
+            const porcentajeInput = parseFloat(document.getElementById('inp_porcentaje_descuento').value) || 0;
+            const porcentajeDecimal = porcentajeInput / 100; 
+
+            let costosCompra = 0;
+            let costosVenta = 0;
+            let honorariosBase = 0;
+            let plusvalia = 0;
+
+            const config = configuracion[tipoActual];
+            if (valorInput > 0 && (valorInput < config.min || (config.max < 5000000 && valorInput > config.max))) {
+                alerta.style.display = 'block';
+            } else {
+                alerta.style.display = 'none';
+            }
+
+            if (tipoActual === 'tipo1') {
+                plusvalia = 0;
+                if (valorInput >= 180000 && valorInput < 325000) {
+                    costosCompra = 18000; costosVenta = 7250; honorariosBase = 43000;
+                } else if (valorInput >= 325000 && valorInput <= 375000) {
+                    costosCompra = 20000; costosVenta = 7750; honorariosBase = 50000;
+                }
+            }
+            else if (tipoActual === 'tipo2') {
+                if (valorInput >= 325000) {
+                    plusvalia = valorInput * 0.03;
+                    if (valorInput >= 325000 && valorInput < 375000) { costosCompra = 36000; costosVenta = 14500; honorariosBase = 50000; }
+                    else if (valorInput >= 375000 && valorInput < 450000) { costosCompra = 36000; costosVenta = 14500; honorariosBase = 55000; }
+                    else if (valorInput >= 450000 && valorInput < 500000) { costosCompra = 38000; costosVenta = 17000; honorariosBase = 59000; }
+                    else if (valorInput >= 500000 && valorInput < 650000) { costosCompra = 38000; costosVenta = 17000; honorariosBase = 70000; }
+                    else if (valorInput >= 650000 && valorInput < 800000) { costosCompra = 38000; costosVenta = 17000; honorariosBase = 85000; }
+                    else if (valorInput >= 800000 && valorInput < 950000) { costosCompra = 61000; costosVenta = 17000; honorariosBase = 97000; }
+                    else if (valorInput >= 950000 && valorInput < 1010000) { costosCompra = 61000; costosVenta = 17000; honorariosBase = 109000; }
+                    else if (valorInput >= 1010000 && valorInput < 1150000) { costosCompra = 75000; costosVenta = 17000; honorariosBase = 121000; }
+                    else if (valorInput >= 1150000 && valorInput < 1350000) { costosCompra = 75000; costosVenta = 17000; honorariosBase = 135000; }
+                    else if (valorInput >= 1350000 && valorInput < 1550000) { costosCompra = 88000; costosVenta = 17000; honorariosBase = 155000; }
+                    else if (valorInput >= 1550000) { costosCompra = 88000; costosVenta = 18500; honorariosBase = 178000; }
+                }
+            }
+
+            const cantidadDescuento = honorariosBase * porcentajeDecimal;
+            const honorariosFinal = honorariosBase - cantidadDescuento;
+            const totalEgresos = costosCompra + costosVenta + honorariosFinal;
+            let neto = 0;
+            if (valorInput > 0) neto = valorInput - totalEgresos + plusvalia;
+
+            let textoDescuento = "";
+            if (porcentajeDecimal > 0) textoDescuento = "Descuento Aplicado (" + (porcentajeDecimal * 100) + "%): -" + cantidadDescuento.toFixed(2);
+
+            document.getElementById('inp_plusvalia').value = formatoDinero(plusvalia);
+            document.getElementById('inp_costos_compra').value = formatoDinero(costosCompra);
+            document.getElementById('inp_costos_venta').value = formatoDinero(costosVenta);
+            document.getElementById('inp_honorarios').value = formatoDinero(honorariosFinal);
+            document.getElementById('inp_leyenda_descuento').value = textoDescuento;
+            document.getElementById('inp_neto').value = formatoDinero(neto);
+
+            divForm.dataset.honorariosFinal = honorariosFinal.toFixed(2);
+            divForm.dataset.plusvalia = plusvalia.toFixed(2);
+            divForm.dataset.textoDescuento = textoDescuento;
+        }
+
+        function formatoDinero(num) {
+            return new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(num);
+        }
+
+        function formatearFechaTexto(fechaStr) {
+            if (!fechaStr) return "";
+            const [anio, mes, dia] = fechaStr.split('-');
+            const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+            return `${dia} de ${meses[parseInt(mes) - 1]} ${anio}`;
+        }
+
+        async function generarPDF() {
+            const { PDFDocument } = PDFLib;
+            if(!pdfUrl) return;
+
+            const valor = document.getElementById('inp_valor').value;
+            const fechaOriginal = document.getElementById('inp_fecha').value;
+            const fechaBonita = formatearFechaTexto(fechaOriginal);
+
+            const mapDatos = {
+                'Cliente': document.getElementById('inp_cliente').value,
+                'Fecha': fechaBonita,
+                'Ejecutivo_Nombre': document.getElementById('inp_ejecutivo').value, // Toma el valor del Select
+                'Correo': document.getElementById('inp_correo').value,
+                'Telefono': document.getElementById('inp_telefono').value,
+                'valor': formatoDinero(valor),
+                'Plusvalia': formatoDinero(divForm.dataset.plusvalia),
+                'CostosCompra': document.getElementById('inp_costos_compra').value,
+                'CostosVenta': document.getElementById('inp_costos_venta').value,
+                'Honorarios': document.getElementById('inp_honorarios').value, 
+                'DescuentoHonorarios': divForm.dataset.textoDescuento,
+                'neto': document.getElementById('inp_neto').value
+            };
+
+            try {
+                const existingPdfBytes = await fetch(pdfUrl).then(res => res.arrayBuffer());
+                const pdfDoc = await PDFDocument.load(existingPdfBytes);
+                const form = pdfDoc.getForm();
+
+                for (const [campoPDF, valorWeb] of Object.entries(mapDatos)) {
+                    try { form.getTextField(campoPDF).setText(valorWeb); } catch (e) {}
+                }
+
+                form.flatten(); 
+
+                const pdfBytes = await pdfDoc.save();
+                download(pdfBytes, `Cotizacion_${mapDatos['Cliente']}.pdf`, "application/pdf");
+            } catch (error) { console.error(error); alert("Error: Verifica nombre del PDF."); }
+        }
+
+        function download(data, filename, type) {
+            var file = new Blob([data], {type: type});
+            var a = document.createElement("a"), url = URL.createObjectURL(file);
+            a.href = url; a.download = filename;
+            document.body.appendChild(a); a.click();
+            setTimeout(function() { document.body.removeChild(a); window.URL.revokeObjectURL(url); }, 0); 
+        }
+        function unirPDFs() { window.open('https://www.ilovepdf.com/es/unir_pdf', '_blank'); }
+    </script>
+</body>
+</html>
