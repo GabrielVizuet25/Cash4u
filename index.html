@@ -51,8 +51,8 @@
 
     <div class="content">
         <div class="botones">
-            <button onclick="iniciarCotizador('tipo1')">COTIZADOR TIPO I ($180k - $375k)</button>
-            <button onclick="iniciarCotizador('tipo2')">COTIZADOR TIPO II (Plusvalía)</button>
+            <button onclick="iniciarCotizador('tipo1')">COTIZADOR TIPO I ($180k - $325k)</button>
+            <button onclick="iniciarCotizador('tipo2')">COTIZADOR TIPO II ($325k - $1.35M)(Plusvalía)</button>
             <button onclick="unirPDFs()" style="background-color: #333;">UNIR PDFS</button>
         </div>
         
@@ -163,15 +163,15 @@
         const configuracion = {
             'tipo1': {
                 pdf: 'Tipo 1.pdf',   
-                titulo: 'Cotización Tipo I ($180k - $375k)',
+                titulo: 'Cotización Tipo I ($180k - $325k)',
                 min: 180000,
-                max: 375000
+                max: 325000
             },
             'tipo2': {
                 pdf: 'Tipo 2.pdf',   
-                titulo: 'Cotización Tipo II ($325k - $1.55M+)',
+                titulo: 'Cotización Tipo II ($325k - $1.35M+)',
                 min: 325000,
-                max: 99999999
+                max: 1350000
             }
         };
 
