@@ -7,31 +7,79 @@
     <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
     
     <style>
-        /* ESTILOS VISUALES */
+        /* --- ESTILOS GENERALES --- */
         body { font-family: 'Helvetica Neue', Arial, sans-serif; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; background-color: #f4f4f4; color: #333; }
-        header { width: 100%; background-color: #FF7F00; padding: 20px 0; text-align: center; color: white; }
+        header { width: 100%; background-color: #FF7F00; padding: 20px 0; text-align: center; color: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         h1 { margin: 0; font-size: 1.5em; }
-        .content { width: 95%; max-width: 1000px; margin: 20px auto; padding: 15px; background-color: white; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); border-radius: 8px; }
         
-        .botones { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 20px; }
-        button { padding: 12px; font-size: 14px; background-color: #FF7F00; color: white; border: none; cursor: pointer; border-radius: 5px; flex: 1 1 auto; min-width: 150px; }
-        button:hover { background-color: #e67000; }
+        .content { width: 95%; max-width: 1000px; margin: 20px auto; padding: 0; }
 
-        .form-container { padding: 20px; border: 1px solid #ddd; border-radius: 8px; margin-top: 10px; background-color: #fafafa; display: none; }
+        /* --- ESTILOS DEL MENÚ PRINCIPAL (TARJETAS) --- */
+        .menu-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .menu-card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-top: 5px solid #FF7F00;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .menu-card h3 { color: #FF7F00; margin-top: 0; font-size: 1.4em; }
+        .menu-card p { color: #666; line-height: 1.5; font-size: 0.95em; margin-bottom: 20px; }
         
+        .btn-menu {
+            background-color: #FF7F00; color: white; border: none; padding: 12px; 
+            width: 100%; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 1em;
+            transition: background 0.3s;
+        }
+        .btn-menu:hover { background-color: #e67000; }
+        
+        /* Botón especial para Unir PDFs */
+        .btn-dark { background-color: #333; }
+        .btn-dark:hover { background-color: #555; }
+
+        /* --- ESTILOS DEL FORMULARIO (COTIZADOR) --- */
+        .form-container { 
+            background-color: white; padding: 30px; border-radius: 8px; 
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); display: none; /* Oculto al inicio */
+            margin: 20px;
+            position: relative;
+        }
+        
+        /* Botón Regresar */
+        .btn-back {
+            background-color: transparent; color: #666; border: 1px solid #ccc;
+            padding: 8px 15px; border-radius: 5px; cursor: pointer; margin-bottom: 20px;
+            display: inline-flex; align-items: center; gap: 5px; font-weight: bold;
+        }
+        .btn-back:hover { background-color: #f0f0f0; color: #333; }
+
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .full-width { grid-column: span 2; }
         
         label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 0.9em; color: #555; }
-        /* Inputs de lectura (gris) */
         input[readonly], select { background-color: #e9ecef; color: #495057; font-weight: bold; border: 1px solid #ccc; }
-        /* El select debe parecer editable */
         select { background-color: #fff; cursor: pointer; }
-        
         input { padding: 10px; font-size: 16px; width: 100%; box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px; }
         
         .section-title { grid-column: span 2; border-bottom: 2px solid #FF7F00; margin-top: 20px; margin-bottom: 10px; padding-bottom: 5px; color: #FF7F00; font-weight: bold; }
-        .btn-action { background-color: #007BFF; width: 100%; margin-top: 20px; font-size: 18px; font-weight: bold; padding: 15px; }
+        .btn-action { background-color: #007BFF; width: 100%; margin-top: 20px; font-size: 18px; font-weight: bold; padding: 15px; border: none; color: white; border-radius: 5px; cursor: pointer; }
         .btn-action:hover { background-color: #0056b3; }
         .alerta { color: red; font-weight: bold; font-size: 0.9em; margin-top: 5px; display: none; }
         .plusvalia-style input { color: #28a745; border-color: #28a745; font-weight: bold; }
@@ -41,6 +89,7 @@
             .form-grid { grid-template-columns: 1fr; }
             .full-width { grid-column: span 1; }
             .section-title { grid-column: span 1; }
+            .menu-container { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -50,15 +99,43 @@
     </header>
 
     <div class="content">
-        <div class="botones">
-            <button onclick="iniciarCotizador('tipo1')">COTIZADOR TIPO I ($180k - $325k)</button>
-            <button onclick="iniciarCotizador('tipo2')">COTIZADOR TIPO II ($325k - $1.35M)(Plusvalía)</button>
-            <button onclick="unirPDFs()" style="background-color: #333;">UNIR PDFS</button>
+
+        <div id="menuPrincipal" class="menu-container">
+            <div class="menu-card">
+                <div>
+                    <h3>Cotizador TIPO I</h3>
+                    <p>Diseñado para operaciones con un valor entre <strong>$180,000 y $375,000 MXN</strong>.</p>
+                    <p style="font-size: 0.8em; color: #888;">*Cálculo estándar sin plusvalía.</p>
+                </div>
+                <button class="btn-menu" onclick="iniciarCotizador('tipo1')">Ingresar al Tipo I</button>
+            </div>
+
+            <div class="menu-card">
+                <div>
+                    <h3>Cotizador TIPO II</h3>
+                    <p>Diseñado para operaciones de <strong>$325,000 MXN en adelante</strong>.</p>
+                    <p style="font-size: 0.8em; color: #28a745;">*Incluye cálculo de Plusvalía (3%).</p>
+                </div>
+                <button class="btn-menu" onclick="iniciarCotizador('tipo2')">Ingresar al Tipo II</button>
+            </div>
+
+            <div class="menu-card" style="border-top-color: #333;">
+                <div>
+                    <h3 style="color: #333;">Unir PDFs</h3>
+                    <p>Herramienta externa para fusionar varios documentos PDF en uno solo.</p>
+                </div>
+                <button class="btn-menu btn-dark" onclick="unirPDFs()">Ir a Herramienta</button>
+            </div>
         </div>
-        
+
         <div id="formularioWeb" class="form-container">
-            <h3 id="tituloFormulario" style="text-align: center; color: #333;">Cotización</h3>
-            <p id="rangoInfo" style="text-align: center; color: #666; font-style: italic;"></p>
+            
+            <button class="btn-back" onclick="regresarMenu()">
+                <span>⬅</span> Regresar al Menú
+            </button>
+
+            <h3 id="tituloFormulario" style="text-align: center; color: #333; margin-top: 0;">Cotización</h3>
+            <p id="rangoInfo" style="text-align: center; color: #666; font-style: italic; margin-bottom: 25px;"></p>
             
             <div class="form-grid">
                 <div class="section-title">1. Datos del Cliente</div>
@@ -97,18 +174,22 @@
                 <div><label>Teléfono:</label><input type="text" id="inp_telefono" readonly></div>
             </div>
             
-            <button class="btn-action" onclick="generarPDF()">📄 GENERAR PDF</button>
+            <button class="btn-action" onclick="generarPDF()">📄 GENERAR PDF FINAL</button>
         </div>
     </div>
 
     <script>
+        // --- VARIABLES DE ESTADO ---
         let tipoActual = ""; 
         let pdfUrl = "";
+        
+        // Referencias DOM
+        const divMenu = document.getElementById('menuPrincipal');
         const divForm = document.getElementById('formularioWeb');
         const rowPlusvalia = document.getElementById('row_plusvalia');
         const alerta = document.getElementById('alertaRango');
 
-        // --- BASE DE DATOS DE EJECUTIVOS (Copiada de tu imagen) ---
+        // --- BASE DE DATOS EJECUTIVOS ---
         const listaEjecutivos = [
             { nombre: "Ana Catalina Dergal", correo: "katian.d@cash4u.com.mx", tel: "5510099363" },
             { nombre: "Claudia Pinedo Poch", correo: "claudia.p@cash4u.com.mx", tel: "5525614296" },
@@ -130,8 +211,7 @@
             { nombre: "Omar Charfen", correo: "omar.charfen@cash4u.com.mx", tel: "5566549935" }
         ];
 
-        // --- INICIALIZAR LA LISTA DESPLEGABLE ---
-        // Esto se ejecuta apenas carga la página para llenar el <select>
+        // Llenar Select
         (function llenarSelectEjecutivos() {
             const select = document.getElementById('inp_ejecutivo');
             listaEjecutivos.forEach(ejec => {
@@ -142,43 +222,38 @@
             });
         })();
 
-        // --- FUNCIÓN: RELLENAR DATOS AL SELECCIONAR ---
         function cargarDatosEjecutivo() {
-            const nombreSeleccionado = document.getElementById('inp_ejecutivo').value;
-            const inputCorreo = document.getElementById('inp_correo');
-            const inputTel = document.getElementById('inp_telefono');
-
-            // Buscar en la lista
-            const ejecutivo = listaEjecutivos.find(e => e.nombre === nombreSeleccionado);
-
-            if (ejecutivo) {
-                inputCorreo.value = ejecutivo.correo;
-                inputTel.value = ejecutivo.tel;
-            } else {
-                inputCorreo.value = "";
-                inputTel.value = "";
-            }
+            const nombre = document.getElementById('inp_ejecutivo').value;
+            const ejecutivo = listaEjecutivos.find(e => e.nombre === nombre);
+            document.getElementById('inp_correo').value = ejecutivo ? ejecutivo.correo : "";
+            document.getElementById('inp_telefono').value = ejecutivo ? ejecutivo.tel : "";
         }
 
+        // --- CONFIGURACIÓN PDF ---
         const configuracion = {
             'tipo1': {
                 pdf: 'Tipo 1.pdf',   
-                titulo: 'Cotización Tipo I ($180k - $325k)',
+                titulo: 'Cotizador TIPO I',
                 min: 180000,
-                max: 325000
+                max: 375000
             },
             'tipo2': {
                 pdf: 'Tipo 2.pdf',   
-                titulo: 'Cotización Tipo II ($325k - $1.35M+)',
+                titulo: 'Cotizador TIPO II',
                 min: 325000,
-                max: 1350000
+                max: 99999999
             }
         };
 
+        // --- NAVEGACIÓN: MOSTRAR COTIZADOR ---
         function iniciarCotizador(tipo) {
             tipoActual = tipo;
             const config = configuracion[tipo];
+            
+            // Ocultar Menú, Mostrar Form
+            divMenu.style.display = 'none';
             divForm.style.display = 'block';
+            
             document.getElementById('tituloFormulario').innerText = config.titulo;
             pdfUrl = config.pdf;
             
@@ -188,15 +263,27 @@
             if (tipo === 'tipo1') rowPlusvalia.style.display = 'none';
             else rowPlusvalia.style.display = 'block';
 
-            // Limpiar campos básicos (no limpiamos el ejecutivo para comodidad)
+            limpiarCampos();
+            calcularDesglose(); 
+        }
+
+        // --- NAVEGACIÓN: REGRESAR AL MENÚ ---
+        function regresarMenu() {
+            divForm.style.display = 'none';
+            divMenu.style.display = 'grid'; // o flex, grid es mejor para las tarjetas
+            limpiarCampos();
+        }
+
+        function limpiarCampos() {
             document.getElementById('inp_valor').value = '';
             document.getElementById('inp_porcentaje_descuento').value = '0';
             document.getElementById('inp_neto').value = '';
             document.getElementById('inp_fecha').value = new Date().toISOString().split('T')[0];
             alerta.style.display = 'none';
-            calcularDesglose(); 
+            // No limpiamos el ejecutivo para no ser molestos si el usuario hace varias cotizaciones seguidas
         }
 
+        // --- CÁLCULOS ---
         function calcularDesglose() {
             const valorInput = parseFloat(document.getElementById('inp_valor').value) || 0;
             const porcentajeInput = parseFloat(document.getElementById('inp_porcentaje_descuento').value) || 0;
@@ -282,7 +369,7 @@
             const mapDatos = {
                 'Cliente': document.getElementById('inp_cliente').value,
                 'Fecha': fechaBonita,
-                'Ejecutivo_Nombre': document.getElementById('inp_ejecutivo').value, // Toma el valor del Select
+                'Ejecutivo_Nombre': document.getElementById('inp_ejecutivo').value,
                 'Correo': document.getElementById('inp_correo').value,
                 'Telefono': document.getElementById('inp_telefono').value,
                 'valor': formatoDinero(valor),
