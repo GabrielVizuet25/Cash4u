@@ -2,25 +2,25 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Cotizadores CASH4U</title>
     <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
     
     <style>
-        /* --- ESTILOS GENERALES "PRO" --- */
+        /* --- ESTILOS GENERALES --- */
         :root {
             --color-primary: #FF7F00;
-            --color-primary-dark: #e67000;
+            --color-primary-dark: #e65100;
             --color-secondary: #007BFF;
             --color-secondary-dark: #0056b3;
             --color-purple: #6f42c1; 
             --color-purple-dark: #5a32a3;
-            --color-bg: #f8f9fa;
+            --color-bg: #f0f2f5;
             --color-text: #333;
             --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
             --shadow-md: 0 8px 24px rgba(0,0,0,0.08);
-            --shadow-lg: 0 15px 35px rgba(0,0,0,0.1);
+            --shadow-lg: 0 15px 35px rgba(0,0,0,0.15);
         }
 
         body { 
@@ -28,147 +28,205 @@
             margin: 0; padding: 0; 
             display: flex; flex-direction: column; align-items: center; 
             background-color: var(--color-bg); color: var(--color-text); 
+            -webkit-font-smoothing: antialiased;
         }
 
+        /* --- NUEVO HEADER MEJORADO --- */
         header { 
             width: 100%; 
-            background: linear-gradient(135deg, var(--color-primary), #ff9933);
-            padding: 25px 0; text-align: center; color: white; 
-            box-shadow: 0 4px 15px rgba(255, 127, 0, 0.3);
-            position: relative; z-index: 10;
+            background: linear-gradient(135deg, #FF8C00, #FF4500); /* Naranja más vibrante */
+            padding: 35px 20px 60px; /* Más espacio abajo para la curva */
+            text-align: center; color: white; 
+            box-shadow: 0 10px 30px rgba(255, 69, 0, 0.3);
+            position: relative; 
+            z-index: 10;
+            border-bottom-left-radius: 50% 20px;
+            border-bottom-right-radius: 50% 20px;
+            overflow: hidden;
         }
-        h1 { margin: 0; font-size: 1.8em; letter-spacing: 1px; text-transform: uppercase; font-weight: 700; }
         
-        .content { width: 92%; max-width: 1100px; margin: 30px auto; padding: 0; position: relative; z-index: 1; }
+        /* Efecto de brillo decorativo en el header */
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .header-content { position: relative; z-index: 2; }
+
+        h1 { 
+            margin: 0; 
+            font-size: 1.8em; 
+            letter-spacing: 1px; 
+            text-transform: uppercase; 
+            font-weight: 800; 
+            line-height: 1.1; 
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .subtitle {
+            margin-top: 5px;
+            font-size: 0.85em;
+            opacity: 0.9;
+            font-weight: 400;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        
+        .content { width: 95%; max-width: 1100px; margin: -30px auto 20px; padding: 0; position: relative; z-index: 1; }
 
         /* --- MENÚ PRINCIPAL --- */
-        .menu-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; padding: 10px; }
+        .menu-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; padding: 5px; }
         
         .menu-card { 
             background: white; border-radius: 15px; overflow: hidden;
             text-align: center; box-shadow: var(--shadow-md);
-            transition: all 0.3s ease; border: none;
+            transition: transform 0.2s ease, box-shadow 0.2s ease; border: none;
             display: flex; flex-direction: column; justify-content: space-between;
+            position: relative;
         }
-        .menu-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-lg); }
+        .menu-card:active { transform: scale(0.98); }
+        .menu-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
         
-        .card-header-accent { height: 8px; width: 100%; }
+        .card-header-accent { height: 6px; width: 100%; }
         .accent-orange { background: linear-gradient(to right, var(--color-primary), #ffd700); }
         .accent-purple { background: linear-gradient(to right, var(--color-purple), #d63384); }
         .accent-dark { background: linear-gradient(to right, #333, #666); }
 
-        .card-body { padding: 30px 25px; }
+        .card-body { padding: 25px 20px; }
         
         .menu-card h3 { 
-            color: var(--color-text); margin-top: 0; font-size: 1.4em; font-weight: 700; 
-            display: flex; align-items: center; justify-content: center; gap: 10px;
+            color: var(--color-text); margin-top: 0; font-size: 1.3em; font-weight: 700; 
+            display: flex; align-items: center; justify-content: center; gap: 8px;
         }
-        .card-icon { font-size: 1.8em; }
-        .menu-card p { color: #666; line-height: 1.6; font-size: 1em; margin-bottom: 25px; }
+        .card-icon { font-size: 1.5em; }
+        .menu-card p { color: #666; line-height: 1.5; font-size: 0.95em; margin-bottom: 20px; }
         
         .btn-menu { 
             background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)); 
             color: white; border: none; padding: 14px; width: 100%; border-radius: 10px; cursor: pointer; 
-            font-weight: 700; font-size: 1.1em; transition: all 0.3s; box-shadow: var(--shadow-sm);
+            font-weight: 700; font-size: 1.05em; box-shadow: var(--shadow-sm);
+            transition: filter 0.2s;
         }
-        .btn-menu:hover { filter: brightness(1.1); box-shadow: 0 5px 15px rgba(255, 127, 0, 0.4); }
+        .btn-menu:hover { filter: brightness(1.1); }
         
         .btn-purple { background: linear-gradient(135deg, var(--color-purple), var(--color-purple-dark)); }
-        .btn-purple:hover { box-shadow: 0 5px 15px rgba(111, 66, 193, 0.4); }
-
         .btn-dark { background: linear-gradient(135deg, #333, #555); }
-        .btn-dark:hover { box-shadow: 0 5px 15px rgba(0,0,0, 0.3); }
 
         /* --- FORMULARIO --- */
         .form-container { 
-            background-color: white; padding: 40px; border-radius: 20px; 
-            box-shadow: var(--shadow-lg); display: none; margin: 20px auto; 
+            background-color: white; padding: 35px; border-radius: 20px; 
+            box-shadow: var(--shadow-lg); display: none; margin: 10px auto; 
             position: relative; border-top: 5px solid var(--color-secondary);
         }
         
         .btn-back { 
-            background-color: #f0f2f5; color: #555; border: none; padding: 10px 18px; 
-            border-radius: 30px; cursor: pointer; margin-bottom: 25px; display: inline-flex; 
-            align-items: center; gap: 8px; font-weight: 600; transition: all 0.2s;
+            background-color: #eff2f7; color: #555; border: none; padding: 8px 16px; 
+            border-radius: 30px; cursor: pointer; margin-bottom: 20px; display: inline-flex; 
+            align-items: center; gap: 6px; font-weight: 600; font-size: 0.9em; transition: background 0.2s;
         }
-        .btn-back:hover { background-color: #e4e6e9; color: #333; transform: translateX(-3px); }
+        .btn-back:hover { background-color: #e0e3e9; }
         
-        #tituloFormulario { text-align: center; color: var(--color-secondary); font-size: 2em; margin: 10px 0 5px 0; }
-        #rangoInfo { text-align: center; color: #777; font-style: italic; margin-bottom: 35px; display: block; background: #f0f8ff; padding: 8px; border-radius: 20px; width: fit-content; margin-left: auto; margin-right: auto; }
+        #tituloFormulario { text-align: center; color: var(--color-secondary); font-size: 1.8em; margin: 5px 0; font-weight: 800; }
+        #rangoInfo { text-align: center; color: #777; font-style: italic; font-size: 0.9em; margin-bottom: 25px; display: block; background: #f0f8ff; padding: 8px 15px; border-radius: 20px; }
 
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .full-width { grid-column: span 2; }
         
-        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.95em; color: #444; }
+        label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 0.85em; color: #555; text-transform: uppercase; letter-spacing: 0.5px; }
         
         input, select { 
-            padding: 12px 15px; font-size: 16px; width: 100%; box-sizing: border-box; 
-            border: 2px solid #eee; border-radius: 10px; background: #fcfcfc; transition: all 0.3s;
-            font-family: 'Poppins', sans-serif;
+            padding: 14px; font-size: 16px; width: 100%; box-sizing: border-box; 
+            border: 2px solid #e1e1e1; border-radius: 12px; background: #fcfcfc; 
+            font-family: 'Poppins', sans-serif; appearance: none; transition: border-color 0.2s;
         }
         input:focus, select:focus { 
             border-color: var(--color-secondary); background: #fff; outline: none; 
-            box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.1); 
         }
         
-        input[readonly] { background-color: #f0f2f5; color: #555; font-weight: 600; border-color: transparent; }
+        input[readonly] { background-color: #f2f4f8; color: #666; font-weight: 600; border-color: transparent; cursor: default; }
 
         .section-title { 
-            grid-column: span 2; border-bottom: none; margin-top: 30px; margin-bottom: 15px; 
-            padding-bottom: 10px; color: var(--color-secondary); font-weight: 700; font-size: 1.2em;
-            position: relative;
+            grid-column: span 2; border-bottom: none; margin-top: 25px; margin-bottom: 10px; 
+            padding-bottom: 5px; color: var(--color-secondary); font-weight: 700; font-size: 1.1em;
+            position: relative; display: flex; align-items: center; gap: 10px;
         }
-        .section-title::after { content: ''; position: absolute; bottom: 0; left: 0; width: 50px; height: 3px; background: var(--color-secondary); border-radius: 3px; }
+        .section-title::before { content: ''; width: 6px; height: 6px; background: var(--color-secondary); border-radius: 50%; display: inline-block; }
+        .section-title::after { content: ''; position: absolute; bottom: 0; left: 16px; width: 40px; height: 3px; background: var(--color-secondary); border-radius: 3px; opacity: 0.5; }
 
         /* Estilos específicos para Dual/Single */
         .single-mode-container { grid-column: span 2; }
         .dual-mode-container { grid-column: span 2; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .neto-dual-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 
         /* Área de Neto Destacada */
         .neto-container {
             grid-column: span 2;
             background: linear-gradient(135deg, #e3f2fd, #f1f8ff);
-            padding: 20px; border-radius: 15px;
+            padding: 25px; border-radius: 15px;
             border-left: 6px solid var(--color-secondary);
             box-shadow: var(--shadow-sm);
             display: flex; flex-direction: column;
         }
         .inp-neto-destacado {
             background: transparent !important; border: none !important; box-shadow: none !important; padding: 5px 0;
-            font-size: 2.2em; color: var(--color-secondary-dark); font-weight: 800;
-            text-shadow: 1px 1px 1px rgba(255,255,255,0.5);
+            font-size: 2em; color: var(--color-secondary-dark); font-weight: 800;
+            text-shadow: 1px 1px 1px rgba(255,255,255,0.5); width: 100%;
         }
 
         .btn-action { 
             background: linear-gradient(135deg, var(--color-secondary), var(--color-secondary-dark));
-            width: 100%; margin-top: 30px; font-size: 1.2em; font-weight: 700; padding: 18px; border: none; color: white; border-radius: 12px; cursor: pointer; 
-            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3); transition: all 0.3s;
+            width: 100%; margin-top: 25px; font-size: 1.1em; font-weight: 700; padding: 18px; border: none; color: white; border-radius: 12px; cursor: pointer; 
+            box-shadow: 0 8px 20px rgba(0, 123, 255, 0.3); transition: transform 0.2s, box-shadow 0.2s;
         }
-        .btn-action:hover { filter: brightness(1.1); transform: translateY(-2px); }
-        .btn-action:disabled { background: #ccc; cursor: not-allowed; }
+        .btn-action:active { transform: translateY(2px); }
+        .btn-action:disabled { background: #ccc; box-shadow: none; transform: none; }
         
-        .alerta { background-color: #fff5f5; color: #c53030; border-left: 4px solid #c53030; padding: 15px; border-radius: 8px; font-weight: 600; margin-top: 15px; display: none; text-align: left; }
+        .alerta { background-color: #fff5f5; color: #c53030; border-left: 4px solid #c53030; padding: 15px; border-radius: 8px; font-weight: 600; margin-top: 15px; display: none; }
         .plusvalia-style input { color: #28a745; background-color: #f0fff4; border: 2px solid #c6f6d5; font-weight: bold; }
 
         /* MODAL */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(4px); }
-        .modal-box { background: white; padding: 40px; border-radius: 20px; text-align: center; max-width: 350px; width: 90%; box-shadow: var(--shadow-lg); animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .modal-icon { font-size: 60px; color: #28a745; margin-bottom: 20px; display: block; }
-        .modal-btn { background: linear-gradient(135deg, #28a745, #218838); color: white; border: none; padding: 12px 30px; border-radius: 50px; cursor: pointer; font-size: 18px; margin-top: 20px; font-weight: 700; }
-        @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 2000; backdrop-filter: blur(4px); }
+        .modal-box { background: white; padding: 30px; border-radius: 20px; text-align: center; max-width: 90%; width: 320px; box-shadow: var(--shadow-lg); animation: popIn 0.3s ease-out; }
+        .modal-icon { font-size: 50px; margin-bottom: 15px; display: block; }
+        .modal-btn { background: linear-gradient(135deg, #28a745, #218838); color: white; border: none; padding: 12px 30px; border-radius: 50px; cursor: pointer; font-size: 16px; margin-top: 15px; font-weight: 700; width: 100%; box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3); }
+        @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-        @media (max-width: 700px) {
-            .form-grid, .dual-mode-container { grid-template-columns: 1fr; }
-            .full-width, .neto-container, .section-title { grid-column: span 1; }
-            .menu-container { grid-template-columns: 1fr; }
-            .form-container { padding: 25px; }
+        /* --- MEDIA QUERIES (MÓVIL) --- */
+        @media (max-width: 768px) {
+            header { padding-bottom: 50px; }
+            h1 { font-size: 1.4em; }
+            .form-container { padding: 20px 15px; }
+            .menu-container { grid-template-columns: 1fr; } 
+            
+            .form-grid, .dual-mode-container, .neto-dual-grid { 
+                grid-template-columns: 1fr !important; 
+                gap: 15px;
+            }
+            
+            .full-width, .neto-container, .section-title, .single-mode-container, .dual-mode-container { 
+                grid-column: span 1; 
+            }
+
             .inp-neto-destacado { font-size: 1.8em; }
+            #neto_dual_mode label { font-size: 0.85em; }
+            .dual-mode-container > div { margin-bottom: 0; }
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>COTIZADORES EJECUTIVOS CA$H4U</h1>
+        <div class="header-content">
+            <h1>💸 CASH4U <span style="font-weight: 300;">|</span> COTIZADORES</h1>
+            <div class="subtitle">Herramientas Financieras Ejecutivas</div>
+        </div>
     </header>
 
     <div class="content">
@@ -177,24 +235,20 @@
             <div class="menu-card">
                 <div class="card-header-accent accent-orange"></div>
                 <div class="card-body">
-                    <h3><span class="card-icon">🏠</span> Cotizador TIPO I</h3>
-                    <p>Rango exclusivo:<br><strong style="font-size:1.2em;">$180,000 - $325,000</strong></p>
-                    <p style="font-size: 0.85em; color: #999; background: #f9f9f9; padding: 5px; border-radius: 5px;">*Cálculo estándar sin plusvalía.</p>
-                </div>
-                <div style="padding: 0 25px 25px;">
-                    <button class="btn-menu" onclick="iniciarCotizador('tipo1')">Ingresar al Tipo I</button>
+                    <h3><span class="card-icon">🏠</span> TIPO I</h3>
+                    <p>Rango exclusivo:<br><strong>$180,000 - $370,000</strong></p>
+                    <p style="font-size: 0.8em; color: #999; background: #f9f9f9; padding: 5px; border-radius: 5px;">*Sin plusvalía.</p>
+                    <button class="btn-menu" onclick="iniciarCotizador('tipo1')">Ingresar</button>
                 </div>
             </div>
 
             <div class="menu-card">
                 <div class="card-header-accent accent-orange"></div>
                 <div class="card-body">
-                    <h3><span class="card-icon">📈</span> Cotizador TIPO II</h3>
-                    <p>Rango exclusivo:<br><strong style="font-size:1.2em;">$325,000 - $1,350,000</strong></p>
-                    <p style="font-size: 0.85em; color: #28a745; background: #f0fff4; padding: 5px; border-radius: 5px; font-weight: 600;">*Incluye Plusvalía (3% sobre valor de subcuenta).</p>
-                </div>
-                <div style="padding: 0 25px 25px;">
-                    <button class="btn-menu" onclick="iniciarCotizador('tipo2')">Ingresar al Tipo II</button>
+                    <h3><span class="card-icon">📈</span> TIPO II</h3>
+                    <p>Rango exclusivo:<br><strong>$370,000 - $1,350,000</strong></p>
+                    <p style="font-size: 0.8em; color: #28a745; background: #f0fff4; padding: 5px; border-radius: 5px; font-weight: 600;">*Plusvalía: 3% s/Subcuenta</p>
+                    <button class="btn-menu" onclick="iniciarCotizador('tipo2')">Ingresar</button>
                 </div>
             </div>
 
@@ -202,11 +256,9 @@
                 <div class="card-header-accent accent-purple"></div>
                 <div class="card-body">
                     <h3><span class="card-icon">🤝</span> Corresidencial</h3>
-                    <p>Rango global:<br><strong style="font-size:1.2em;">$325,000 - $1,350,000</strong></p>
-                    <p style="font-size: 0.85em; color: var(--color-purple); background: #f3e5f5; padding: 5px; border-radius: 5px; font-weight: 600;">*Mancomunado. Plusvalía (3% sobre valor de subcuenta).</p>
-                </div>
-                <div style="padding: 0 25px 25px;">
-                    <button class="btn-menu btn-purple" onclick="iniciarCotizador('corresidencial')">Ingresar Corresidencial</button>
+                    <p>Rango global:<br><strong>$370,000 - $1,350,000</strong></p>
+                    <p style="font-size: 0.8em; color: var(--color-purple); background: #f3e5f5; padding: 5px; border-radius: 5px; font-weight: 600;">*Mancomunado. Plusvalía: 3% s/Subcuenta</p>
+                    <button class="btn-menu btn-purple" onclick="iniciarCotizador('corresidencial')">Ingresar</button>
                 </div>
             </div>
 
@@ -214,61 +266,56 @@
                 <div class="card-header-accent accent-dark"></div>
                 <div class="card-body">
                     <h3><span class="card-icon">📄</span> Unir PDFs</h3>
-                    <p>Herramienta externa para fusionar documentos.</p>
-                </div>
-                <div style="padding: 0 25px 25px;">
+                    <p>Fusión de documentos.</p>
                     <button class="btn-menu btn-dark" onclick="unirPDFs()">Ir a Herramienta</button>
                 </div>
             </div>
         </div>
 
         <div id="formularioWeb" class="form-container">
-            <button class="btn-back" onclick="regresarMenu()"><span>❮</span> Regresar al Menú</button>
+            <button class="btn-back" onclick="regresarMenu()"><span>❮</span> Menú Principal</button>
 
             <h3 id="tituloFormulario">Cotización</h3>
             <span id="rangoInfo"></span>
             
             <div class="form-grid">
                 <div class="section-title">1. Información del Cliente</div>
-                <div class="full-width"><label>Nombre Completo (Titular):</label><input type="text" id="inp_cliente" placeholder="Ej. Juan Pérez Hernández"></div>
+                <div class="full-width">
+                    <label>Nombre (Titular):</label>
+                    <input type="text" id="inp_cliente" placeholder="Ej. JUAN PÉREZ" style="text-transform: uppercase;">
+                </div>
                 
                 <div id="div_cliente2" class="full-width" style="display:none;">
-                    <label>Nombre Completo (Co-titular / Cliente 2):</label>
-                    <input type="text" id="inp_cliente2" placeholder="Ej. María Lopez (Segundo Cliente)">
+                    <label>Nombre (Co-titular):</label>
+                    <input type="text" id="inp_cliente2" placeholder="Ej. MARÍA LOPEZ" style="text-transform: uppercase;">
                 </div>
 
                 <div><label>Fecha de Emisión:</label><input type="date" id="inp_fecha"></div>
 
-                <div class="section-title">2. Datos Financieros de la Operación</div>
+                <div class="section-title">2. Datos Financieros</div>
                 
                 <div id="input_single_mode" class="single-mode-container">
-                    <label style="font-size: 1.1em; color: var(--color-secondary);">MONTO VALOR DE SUBCUENTA ($):</label>
-                    <input type="text" inputmode="numeric" id="inp_valor" placeholder="Ej: $500,000.00" 
-                           oninput="calcularDesglose()" 
-                           onblur="formatearInput(this)" 
-                           onfocus="desformatearInput(this)"
+                    <label style="font-size: 1em; color: var(--color-secondary);">VALOR DE SUBCUENTA ($):</label>
+                    <input type="text" inputmode="numeric" id="inp_valor" placeholder="$0.00" 
+                           oninput="calcularDesglose()" onblur="formatearInput(this)" onfocus="desformatearInput(this)"
                            style="font-size: 1.2em; font-weight: bold;">
                 </div>
 
                 <div id="input_dual_mode" class="dual-mode-container" style="display: none;">
                     <div>
-                        <label style="color: var(--color-purple);">VALOR SUBCUENTA 1 ($):</label>
-                        <input type="text" inputmode="numeric" id="inp_valor1" placeholder="Ej: $250,000.00" 
-                               oninput="calcularDesglose()" 
-                               onblur="formatearInput(this)" 
-                               onfocus="desformatearInput(this)"
+                        <label style="color: var(--color-purple);">SUBCUENTA 1 ($):</label>
+                        <input type="text" inputmode="numeric" id="inp_valor1" placeholder="$0.00" 
+                               oninput="calcularDesglose()" onblur="formatearInput(this)" onfocus="desformatearInput(this)"
                                style="font-weight: bold; border-color: var(--color-purple);">
                     </div>
                     <div>
-                        <label style="color: var(--color-purple);">VALOR SUBCUENTA 2 ($):</label>
-                        <input type="text" inputmode="numeric" id="inp_valor2" placeholder="Ej: $250,000.00" 
-                               oninput="calcularDesglose()" 
-                               onblur="formatearInput(this)" 
-                               onfocus="desformatearInput(this)"
+                        <label style="color: var(--color-purple);">SUBCUENTA 2 ($):</label>
+                        <input type="text" inputmode="numeric" id="inp_valor2" placeholder="$0.00" 
+                               oninput="calcularDesglose()" onblur="formatearInput(this)" onfocus="desformatearInput(this)"
                                style="font-weight: bold; border-color: var(--color-purple);">
                     </div>
-                    <div class="full-width" style="text-align: right; font-size: 0.9em; color: #666; margin-top: -15px;">
-                        Suma Total Subcuentas: <span id="lbl_suma_total" style="font-weight: bold;">$0.00</span>
+                    <div class="full-width" style="text-align: right; font-size: 0.9em; color: #666;">
+                        Suma Total: <span id="lbl_suma_total" style="font-weight: bold;">$0.00</span>
                     </div>
                 </div>
 
@@ -277,23 +324,23 @@
                         <div style="display:flex; align-items:center; gap:10px;">
                             <span style="font-size: 1.5em;">⚠️</span>
                             <div>
-                                <strong>MONTO TOTAL FUERA DE RANGO.</strong><br>
-                                <span style="font-weight:normal; font-size:0.9em;">Verifica el cotizador seleccionado.</span>
+                                <strong>MONTO FUERA DE RANGO.</strong><br>
+                                <span style="font-weight:normal; font-size:0.9em;">Verifica el tipo de cotizador.</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div id="row_plusvalia" class="plusvalia-style" style="display: none;">
-                    <label>+ Plusvalía (3% sobre Subcuenta):</label><input type="text" id="inp_plusvalia" readonly>
+                <div id="row_plusvalia" class="plusvalia-style full-width" style="display: none;">
+                    <label>+ Plusvalía (3%):</label><input type="text" id="inp_plusvalia" readonly>
                 </div>
                 
-                <div><label>- Costos de Compra:</label><input type="text" id="inp_costos_compra" readonly></div>
-                <div><label>- Costos de Venta:</label><input type="text" id="inp_costos_venta" readonly></div>
-                <div><label>- Honorarios (Base):</label><input type="text" id="inp_honorarios" readonly></div>
+                <div><label>- Costos Compra:</label><input type="text" id="inp_costos_compra" readonly></div>
+                <div><label>- Costos Venta:</label><input type="text" id="inp_costos_venta" readonly></div>
+                <div><label>- Honorarios Base:</label><input type="text" id="inp_honorarios" readonly></div>
                 
                 <div>
-                    <label>Aplicar Descuento (%):</label>
+                    <label>Descuento (%):</label>
                     <select id="inp_porcentaje_descuento" onchange="calcularDesglose()">
                         <option value="0">0% (Sin descuento)</option>
                         <option value="5">5% Descuento</option>
@@ -302,64 +349,64 @@
                     </select>
                 </div>
 
-                <div class="full-width"><label>Vista Previa Descuento:</label><input type="text" id="inp_leyenda_descuento" readonly style="font-style: italic; color: #d9534f; background: #fff5f5; border-color: #feb2b2;"></div>
+                <div class="full-width"><label>Info Descuento:</label><input type="text" id="inp_leyenda_descuento" readonly style="font-style: italic; color: #d9534f; background: #fff5f5; border-color: #feb2b2; font-size: 0.9em;"></div>
                 
                 <div id="neto_single_mode" class="neto-container">
-                    <label style="color: var(--color-secondary-dark); font-size: 1em;">MONTO NETO A RECIBIR (=):</label>
+                    <label style="color: var(--color-secondary-dark); font-size: 0.9em;">NETO A RECIBIR (=):</label>
                     <input type="text" id="inp_neto" readonly class="inp-neto-destacado">
                 </div>
 
                 <div id="neto_dual_mode" class="neto-container" style="display: none; background: linear-gradient(135deg, #f3e5f5, #fdfbff); border-left-color: var(--color-purple);">
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="neto-dual-grid">
                         <div>
-                            <label style="color: var(--color-purple-dark); font-size: 0.9em;">NETO CLIENTE 1 (Proporcional):</label>
-                            <input type="text" id="inp_neto1" readonly class="inp-neto-destacado" style="font-size: 1.5em;">
+                            <label style="color: var(--color-purple-dark); font-size: 0.85em;">NETO CLIENTE 1:</label>
+                            <input type="text" id="inp_neto1" readonly class="inp-neto-destacado" style="font-size: 1.6em;">
                         </div>
                         <div>
-                            <label style="color: var(--color-purple-dark); font-size: 0.9em;">NETO CLIENTE 2 (Proporcional):</label>
-                            <input type="text" id="inp_neto2" readonly class="inp-neto-destacado" style="font-size: 1.5em;">
+                            <label style="color: var(--color-purple-dark); font-size: 0.85em;">NETO CLIENTE 2:</label>
+                            <input type="text" id="inp_neto2" readonly class="inp-neto-destacado" style="font-size: 1.6em;">
                         </div>
                     </div>
-                    <div style="text-align: center; margin-top: 10px; color: #777; font-size: 0.9em;">
-                        Total Neto de la Operación: <span id="lbl_neto_total_dual" style="font-weight: bold;">$0.00</span>
+                    <div style="text-align: center; margin-top: 15px; color: #777; font-size: 0.9em;">
+                        Total Neto: <span id="lbl_neto_total_dual" style="font-weight: bold;">$0.00</span>
                     </div>
                 </div>
 
-                <div class="section-title">3. Datos del Ejecutivo</div>
+                <div class="section-title">3. Ejecutivo</div>
                 <div class="full-width">
-                    <label>Seleccionar Ejecutivo:</label>
+                    <label>Ejecutivo:</label>
                     <select id="inp_ejecutivo" onchange="cargarDatosEjecutivo()">
-                        <option value="">-- Seleccione de la lista --</option>
+                        <option value="">-- Seleccione --</option>
                     </select>
                 </div>
-                <div><label>Correo Electrónico:</label><input type="text" id="inp_correo" readonly></div>
-                <div><label>Teléfono de Contacto:</label><input type="text" id="inp_telefono" readonly></div>
+                <div><label>Email:</label><input type="text" id="inp_correo" readonly style="font-size: 0.9em;"></div>
+                <div><label>Teléfono:</label><input type="text" id="inp_telefono" readonly></div>
             </div>
             
-            <button id="btnGenerar" class="btn-action" onclick="generarPDF()">✨ GENERAR DOCUMENTO PDF</button>
+            <button id="btnGenerar" class="btn-action" onclick="generarPDF()">GENERAR PDF ✨</button>
         </div>
     </div>
 
     <div id="modalExito" class="modal-overlay">
         <div class="modal-box">
             <span class="modal-icon">🎉</span>
-            <h3 style="margin-top:0; color: #28a745;">¡Documento Listo!</h3>
-            <p style="margin-bottom: 15px; font-size: 1.1em;">La cotización se ha generado exitosamente.</p>
-            <button class="modal-btn" onclick="cerrarModal()">Entendido, gracias</button>
+            <h3 style="margin-top:0; color: #28a745;">¡Listo!</h3>
+            <p style="margin-bottom: 15px;">Documento generado.</p>
+            <button class="modal-btn" onclick="cerrarModal()">Cerrar</button>
         </div>
     </div>
 
     <script>
+        // CONFIGURACION ACTUALIZADA
         const configuracion = {
-            'tipo1': { pdf: 'Tipo 1.pdf', titulo: 'Cotizador TIPO I', min: 180000, max: 325000, isDual: false },
-            'tipo2': { pdf: 'Tipo 2.pdf', titulo: 'Cotizador TIPO II', min: 325000, max: 1350000, isDual: false },
-            'corresidencial': { pdf: 'Corresidencial.pdf', titulo: 'Cotizador CORRESIDENCIAL', min: 325000, max: 1350000, isDual: true }
+            'tipo1': { pdf: 'Tipo 1.pdf', titulo: 'Cotizador TIPO I', min: 180000, max: 370000, isDual: false },
+            'tipo2': { pdf: 'Tipo 2.pdf', titulo: 'Cotizador TIPO II', min: 370000, max: 1350000, isDual: false },
+            'corresidencial': { pdf: 'Corresidencial.pdf', titulo: 'Cotizador CORRESIDENCIAL', min: 370000, max: 1350000, isDual: true }
         };
 
         let tipoActual = ""; let pdfUrl = "";
         const divMenu = document.getElementById('menuPrincipal');
         const divForm = document.getElementById('formularioWeb');
-        
         const inputSingle = document.getElementById('input_single_mode');
         const inputDual = document.getElementById('input_dual_mode');
         const netoSingle = document.getElementById('neto_single_mode');
@@ -399,28 +446,22 @@
             });
         })();
 
-        // --- FUNCIONES DE FORMATO DE INPUTS ---
         function formatearInput(elem) {
             if (!elem.value) return;
             const valorLimpio = parseFloat(elem.value.replace(/[^0-9.]/g, ''));
-            if (!isNaN(valorLimpio)) {
-                elem.value = formatoDinero(valorLimpio);
-            }
+            if (!isNaN(valorLimpio)) elem.value = formatoDinero(valorLimpio);
         }
 
         function desformatearInput(elem) {
             if (!elem.value) return;
-            // Muestra solo el número para editar
             elem.value = elem.value.replace(/[^0-9.]/g, '');
         }
 
         function obtenerValorNumerico(idElemento) {
             const val = document.getElementById(idElemento).value;
-            // Remueve todo lo que no sea número o punto
             const limpio = val.replace(/[^0-9.]/g, '');
             return parseFloat(limpio) || 0;
         }
-        // ---------------------------------------
 
         function cargarDatosEjecutivo() {
             const nombre = document.getElementById('inp_ejecutivo').value;
@@ -432,15 +473,12 @@
         function iniciarCotizador(tipo) {
             tipoActual = tipo;
             const config = configuracion[tipo];
-            
             divMenu.style.display = 'none';
             divForm.style.display = 'block';
             document.getElementById('tituloFormulario').innerText = config.titulo;
-            
             pdfUrl = config.pdf; 
-            
             const rInfo = document.getElementById('rangoInfo');
-            rInfo.innerText = `Rango válido: ${formatoDinero(config.min)} — ${formatoDinero(config.max)}`;
+            rInfo.innerText = `Rango: ${formatoDinero(config.min)} — ${formatoDinero(config.max)}`;
 
             if (config.isDual) {
                 inputSingle.style.display = 'none';
@@ -455,11 +493,9 @@
                 netoSingle.style.display = 'flex';
                 netoDual.style.display = 'none';
                 divCliente2.style.display = 'none'; 
-                
                 if (tipo === 'tipo2') rowPlusvalia.style.display = 'block';
                 else rowPlusvalia.style.display = 'none';
             }
-
             limpiarCampos();
             calcularDesglose();
             window.scrollTo(0, 0);
@@ -483,25 +519,20 @@
             document.getElementById('inp_neto2').value = '';
             document.getElementById('lbl_suma_total').innerText = '$0.00';
             document.getElementById('lbl_neto_total_dual').innerText = '$0.00';
-            
             document.getElementById('inp_porcentaje_descuento').value = '0';
             document.getElementById('inp_plusvalia').value = '';
             document.getElementById('inp_costos_compra').value = '';
             document.getElementById('inp_costos_venta').value = '';
             document.getElementById('inp_honorarios').value = '';
             document.getElementById('inp_fecha').value = new Date().toISOString().split('T')[0];
-            
             alerta.style.display = 'none';
-            btnGenerar.disabled = false; btnGenerar.style.opacity = "1";
+            btnGenerar.disabled = false;
         }
 
         function calcularDesglose() {
             const config = configuracion[tipoActual];
-            let valorTotal = 0;
-            let val1 = 0; 
-            let val2 = 0;
+            let valorTotal = 0; let val1 = 0; let val2 = 0;
 
-            // USAMOS LA FUNCIÓN obtenerValorNumerico PARA LEER LOS INPUTS AUNQUE TENGAN SIGNOS $
             if (config.isDual) {
                 val1 = obtenerValorNumerico('inp_valor1');
                 val2 = obtenerValorNumerico('inp_valor2');
@@ -511,12 +542,11 @@
                 valorTotal = obtenerValorNumerico('inp_valor');
             }
 
-            const porcentajeInput = parseFloat(document.getElementById('inp_porcentaje_descuento').value) || 0;
-            const porcentajeDecimal = porcentajeInput / 100; 
+            const porcentajeDecimal = (parseFloat(document.getElementById('inp_porcentaje_descuento').value) || 0) / 100; 
 
             if (valorTotal > 0 && (valorTotal < config.min || valorTotal > config.max)) {
                 alerta.style.display = 'block';
-                btnGenerar.disabled = true; btnGenerar.style.opacity = "0.5";
+                btnGenerar.disabled = true; 
                 if(config.isDual) {
                     document.getElementById('inp_neto1').value = "$0.00";
                     document.getElementById('inp_neto2').value = "$0.00";
@@ -526,21 +556,23 @@
                 return;
             } else {
                 alerta.style.display = 'none';
-                btnGenerar.disabled = false; btnGenerar.style.opacity = "1";
+                btnGenerar.disabled = false;
             }
 
             let costosCompra = 0; let costosVenta = 0; let honorariosBase = 0; let plusvalia = 0;
 
             if (tipoActual === 'tipo1') {
                 plusvalia = 0;
-                if (valorTotal >= 180000 && valorTotal < 325000) { 
+                // RANGO EXTENDIDO
+                if (valorTotal >= 180000 && valorTotal < 370000) { 
                     costosCompra = 18000; costosVenta = 7250; honorariosBase = 43000; 
                 } 
             }
             else if (tipoActual === 'tipo2' || tipoActual === 'corresidencial') {
-                if (valorTotal >= 325000) {
+                // INICIA EN 370k
+                if (valorTotal >= 370000) {
                     plusvalia = valorTotal * 0.03;
-                    if (valorTotal >= 325000 && valorTotal < 375000) { costosCompra = 36000; costosVenta = 14500; honorariosBase = 50000; }
+                    if (valorTotal >= 370000 && valorTotal < 375000) { costosCompra = 36000; costosVenta = 14500; honorariosBase = 50000; }
                     else if (valorTotal >= 375000 && valorTotal < 450000) { costosCompra = 36000; costosVenta = 14500; honorariosBase = 55000; }
                     else if (valorTotal >= 450000 && valorTotal < 500000) { costosCompra = 38000; costosVenta = 17000; honorariosBase = 59000; }
                     else if (valorTotal >= 500000 && valorTotal < 650000) { costosCompra = 38000; costosVenta = 17000; honorariosBase = 70000; }
@@ -556,7 +588,6 @@
             const cantidadDescuento = honorariosBase * porcentajeDecimal;
             const honorariosFinal = honorariosBase - cantidadDescuento;
             const totalEgresos = costosCompra + costosVenta + honorariosFinal;
-            
             let netoGlobal = 0;
             if (valorTotal > 0) netoGlobal = valorTotal - totalEgresos + plusvalia;
 
@@ -582,7 +613,6 @@
                 document.getElementById('inp_neto').value = formatoDinero(netoGlobal);
             }
 
-            // Guardamos datos crudos para PDF
             divForm.dataset.honorariosFinal = honorariosFinal.toFixed(2);
             divForm.dataset.plusvalia = plusvalia.toFixed(2);
             divForm.dataset.textoDescuento = textoDescuento;
@@ -603,46 +633,37 @@
 
         async function generarPDF() {
             const { PDFDocument } = PDFLib; if(!pdfUrl) return;
-            
             const fechaBonita = formatearFechaTexto(document.getElementById('inp_fecha').value);
             const config = configuracion[tipoActual];
             
-            // Recuperar valores numéricos crudos guardados en el dataset o calcularlos
-            let valParaPDF = 0;
-            let netoParaPDF = 0;
-            
+            let valParaPDF = 0; let netoParaPDF = 0;
             if (config.isDual) {
                 valParaPDF = parseFloat(divForm.dataset.valorTotalPDF);
                 netoParaPDF = parseFloat(divForm.dataset.netoTotalPDF);
             } else {
                 valParaPDF = obtenerValorNumerico('inp_valor');
-                // Para el neto, como es readonly y tiene texto, lo limpiamos
                 netoParaPDF = document.getElementById('inp_neto').value.replace(/[^0-9.-]+/g,""); 
             }
 
-            // --- LÓGICA DEL NOMBRE DEL ARCHIVO ---
-            const cliente1 = document.getElementById('inp_cliente').value.trim() || "Cliente";
-            const cliente2 = document.getElementById('inp_cliente2').value.trim();
+            const cliente1 = (document.getElementById('inp_cliente').value.trim() || "CLIENTE").toUpperCase();
+            const cliente2 = document.getElementById('inp_cliente2').value.trim().toUpperCase();
             
-            // Sanitizar nombres (quitar caracteres raros para el nombre de archivo)
-            const safeC1 = cliente1.replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ ]/g, "");
-            
+            const safeC1 = cliente1.replace(/[^a-zA-Z0-9ÁÉÍÓÚÑ ]/g, "");
             let nombreArchivo = `Propuesta_${safeC1}.pdf`;
             
             if(config.isDual && cliente2) {
-                const safeC2 = cliente2.replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ ]/g, "");
+                const safeC2 = cliente2.replace(/[^a-zA-Z0-9ÁÉÍÓÚÑ ]/g, "");
                 nombreArchivo = `Propuesta_${safeC1}_y_${safeC2}.pdf`;
             }
-            // -------------------------------------
 
             const mapDatos = {
-                'Cliente': document.getElementById('inp_cliente').value,
-                'Cliente2': document.getElementById('inp_cliente2').value, 
+                'Cliente': cliente1,
+                'Cliente2': cliente2,
                 'Fecha': fechaBonita,
                 'Ejecutivo_Nombre': document.getElementById('inp_ejecutivo').value,
                 'Correo': document.getElementById('inp_correo').value,
                 'Telefono': document.getElementById('inp_telefono').value,
-                'valor': formatoDinero(valParaPDF), // Se envía formateado $0,000.00 al PDF
+                'valor': formatoDinero(valParaPDF),
                 'Plusvalia': formatoDinero(divForm.dataset.plusvalia),
                 'CostosCompra': document.getElementById('inp_costos_compra').value,
                 'CostosVenta': document.getElementById('inp_costos_venta').value,
@@ -652,8 +673,7 @@
             };
             
             if(config.isDual) {
-                // Enviar los valores individuales formateados
-                mapDatos['Valor1'] = document.getElementById('inp_valor1').value; // Ya tiene formato por el onblur
+                mapDatos['Valor1'] = document.getElementById('inp_valor1').value; 
                 mapDatos['Valor2'] = document.getElementById('inp_valor2').value;
                 mapDatos['Neto1'] = document.getElementById('inp_neto1').value;
                 mapDatos['Neto2'] = document.getElementById('inp_neto2').value;
@@ -663,22 +683,14 @@
                 const existingPdfBytes = await fetch(pdfUrl).then(res => res.arrayBuffer());
                 const pdfDoc = await PDFDocument.load(existingPdfBytes);
                 const form = pdfDoc.getForm();
-                
                 for (const [campoPDF, valorWeb] of Object.entries(mapDatos)) { 
-                    try { 
-                        const field = form.getTextField(campoPDF);
-                        if(field) field.setText(valorWeb); 
-                    } catch (e) {} 
+                    try { const field = form.getTextField(campoPDF); if(field) field.setText(valorWeb); } catch (e) {} 
                 }
-                
                 form.flatten(); 
                 const pdfBytes = await pdfDoc.save();
                 download(pdfBytes, nombreArchivo, "application/pdf");
                 modal.style.display = 'flex';
-            } catch (error) { 
-                console.error(error); 
-                alert("Error: No se encontró el archivo PDF plantilla (" + pdfUrl + "). Asegúrate de subirlo."); 
-            }
+            } catch (error) { console.error(error); alert("Error: Verifica el archivo PDF."); }
         }
 
         function download(data, filename, type) {
