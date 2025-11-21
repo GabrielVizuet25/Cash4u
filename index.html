@@ -14,7 +14,9 @@
             --color-primary-dark: #e67000;
             --color-secondary: #007BFF;
             --color-secondary-dark: #0056b3;
-            --color-bg: #f8f9fa; /* Fondo ligeramente más claro */
+            --color-purple: #6f42c1; 
+            --color-purple-dark: #5a32a3;
+            --color-bg: #f8f9fa;
             --color-text: #333;
             --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
             --shadow-md: 0 8px 24px rgba(0,0,0,0.08);
@@ -22,53 +24,43 @@
         }
 
         body { 
-            font-family: 'Poppins', sans-serif; /* Fuente moderna */
-            margin: 0; 
-            padding: 0; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            background-color: var(--color-bg); 
-            color: var(--color-text); 
+            font-family: 'Poppins', sans-serif; 
+            margin: 0; padding: 0; 
+            display: flex; flex-direction: column; align-items: center; 
+            background-color: var(--color-bg); color: var(--color-text); 
         }
 
         header { 
             width: 100%; 
-            background: linear-gradient(135deg, var(--color-primary), #ff9933); /* Gradiente naranja */
-            padding: 25px 0; 
-            text-align: center; 
-            color: white; 
+            background: linear-gradient(135deg, var(--color-primary), #ff9933);
+            padding: 25px 0; text-align: center; color: white; 
             box-shadow: 0 4px 15px rgba(255, 127, 0, 0.3);
-            position: relative;
-            z-index: 10;
+            position: relative; z-index: 10;
         }
-        h1 { margin: 0; font-size: 1.8em; letter-spacing: 1px;text-transform: uppercase; font-weight: 700; }
+        h1 { margin: 0; font-size: 1.8em; letter-spacing: 1px; text-transform: uppercase; font-weight: 700; }
         
         .content { width: 92%; max-width: 1100px; margin: 30px auto; padding: 0; position: relative; z-index: 1; }
 
-        /* --- MENÚ PRINCIPAL (TARJETAS PREMIUM) --- */
-        .menu-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; padding: 10px; }
+        /* --- MENÚ PRINCIPAL --- */
+        .menu-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; padding: 10px; }
         
         .menu-card { 
-            background: white; 
-            border-radius: 15px; 
-            overflow: hidden;
-            text-align: center; 
-            box-shadow: var(--shadow-md);
-            transition: all 0.3s ease; 
-            border: none;
+            background: white; border-radius: 15px; overflow: hidden;
+            text-align: center; box-shadow: var(--shadow-md);
+            transition: all 0.3s ease; border: none;
             display: flex; flex-direction: column; justify-content: space-between;
         }
         .menu-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-lg); }
         
         .card-header-accent { height: 8px; width: 100%; }
         .accent-orange { background: linear-gradient(to right, var(--color-primary), #ffd700); }
+        .accent-purple { background: linear-gradient(to right, var(--color-purple), #d63384); }
         .accent-dark { background: linear-gradient(to right, #333, #666); }
 
         .card-body { padding: 30px 25px; }
         
         .menu-card h3 { 
-            color: var(--color-text); margin-top: 0; font-size: 1.5em; font-weight: 700; 
+            color: var(--color-text); margin-top: 0; font-size: 1.4em; font-weight: 700; 
             display: flex; align-items: center; justify-content: center; gap: 10px;
         }
         .card-icon { font-size: 1.8em; }
@@ -80,10 +72,14 @@
             font-weight: 700; font-size: 1.1em; transition: all 0.3s; box-shadow: var(--shadow-sm);
         }
         .btn-menu:hover { filter: brightness(1.1); box-shadow: 0 5px 15px rgba(255, 127, 0, 0.4); }
+        
+        .btn-purple { background: linear-gradient(135deg, var(--color-purple), var(--color-purple-dark)); }
+        .btn-purple:hover { box-shadow: 0 5px 15px rgba(111, 66, 193, 0.4); }
+
         .btn-dark { background: linear-gradient(135deg, #333, #555); }
         .btn-dark:hover { box-shadow: 0 5px 15px rgba(0,0,0, 0.3); }
 
-        /* --- FORMULARIO EJECUTIVO --- */
+        /* --- FORMULARIO --- */
         .form-container { 
             background-color: white; padding: 40px; border-radius: 20px; 
             box-shadow: var(--shadow-lg); display: none; margin: 20px auto; 
@@ -105,7 +101,6 @@
         
         label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.95em; color: #444; }
         
-        /* Inputs Modernos */
         input, select { 
             padding: 12px 15px; font-size: 16px; width: 100%; box-sizing: border-box; 
             border: 2px solid #eee; border-radius: 10px; background: #fcfcfc; transition: all 0.3s;
@@ -116,9 +111,7 @@
             box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.1); 
         }
         
-        /* Inputs Readonly Estilizados */
         input[readonly] { background-color: #f0f2f5; color: #555; font-weight: 600; border-color: transparent; }
-        select { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%27292.4%27%20height%3D%27292.4%27%3E%3Cpath%20fill%3D%27%23007BFF%27%20d%3D%27M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2087.2c0%205%201.8%209.3%205.4%2012.9l137.7%20137.7a17.6%2017.6%200%200%200%2012.9%205.4h.4a17.6%2017.6%200%200%200%2012.9-5.4L287%20100.1a17.6%2017.6%200%200%200%205.4-12.9c0-5-1.8-9.3-5.4-12.9z%27%2F%3E%3C%2Fsvg%3E"); background-repeat: no-repeat; background-position: right 15px top 50%; background-size: 12px auto; }
 
         .section-title { 
             grid-column: span 2; border-bottom: none; margin-top: 30px; margin-bottom: 15px; 
@@ -126,6 +119,10 @@
             position: relative;
         }
         .section-title::after { content: ''; position: absolute; bottom: 0; left: 0; width: 50px; height: 3px; background: var(--color-secondary); border-radius: 3px; }
+
+        /* Estilos específicos para Dual/Single */
+        .single-mode-container { grid-column: span 2; }
+        .dual-mode-container { grid-column: span 2; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 
         /* Área de Neto Destacada */
         .neto-container {
@@ -136,8 +133,8 @@
             box-shadow: var(--shadow-sm);
             display: flex; flex-direction: column;
         }
-        #inp_neto {
-            background: transparent; border: none; box-shadow: none; padding: 5px 0;
+        .inp-neto-destacado {
+            background: transparent !important; border: none !important; box-shadow: none !important; padding: 5px 0;
             font-size: 2.2em; color: var(--color-secondary-dark); font-weight: 800;
             text-shadow: 1px 1px 1px rgba(255,255,255,0.5);
         }
@@ -147,28 +144,25 @@
             width: 100%; margin-top: 30px; font-size: 1.2em; font-weight: 700; padding: 18px; border: none; color: white; border-radius: 12px; cursor: pointer; 
             box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3); transition: all 0.3s;
         }
-        .btn-action:hover { filter: brightness(1.1); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0, 123, 255, 0.4); }
-        .btn-action:disabled { background: #ccc; cursor: not-allowed; box-shadow: none; transform: none; }
+        .btn-action:hover { filter: brightness(1.1); transform: translateY(-2px); }
+        .btn-action:disabled { background: #ccc; cursor: not-allowed; }
         
-        .alerta { background-color: #fff5f5; color: #c53030; border-left: 4px solid #c53030; padding: 15px; border-radius: 8px; font-weight: 600; margin-top: 15px; display: none; text-align: left; box-shadow: var(--shadow-sm); }
+        .alerta { background-color: #fff5f5; color: #c53030; border-left: 4px solid #c53030; padding: 15px; border-radius: 8px; font-weight: 600; margin-top: 15px; display: none; text-align: left; }
         .plusvalia-style input { color: #28a745; background-color: #f0fff4; border: 2px solid #c6f6d5; font-weight: bold; }
-        .plusvalia-style label { color: #28a745; }
 
-        /* --- MODAL --- */
+        /* MODAL */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 1000; backdrop-filter: blur(4px); }
         .modal-box { background: white; padding: 40px; border-radius: 20px; text-align: center; max-width: 350px; width: 90%; box-shadow: var(--shadow-lg); animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .modal-icon { font-size: 60px; color: #28a745; margin-bottom: 20px; display: block; }
-        .modal-btn { background: linear-gradient(135deg, #28a745, #218838); color: white; border: none; padding: 12px 30px; border-radius: 50px; cursor: pointer; font-size: 18px; margin-top: 20px; font-weight: 700; box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3); transition: all 0.3s; }
-        .modal-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(40, 167, 69, 0.4); }
+        .modal-btn { background: linear-gradient(135deg, #28a745, #218838); color: white; border: none; padding: 12px 30px; border-radius: 50px; cursor: pointer; font-size: 18px; margin-top: 20px; font-weight: 700; }
         @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
         @media (max-width: 700px) {
-            .form-grid { grid-template-columns: 1fr; }
+            .form-grid, .dual-mode-container { grid-template-columns: 1fr; }
             .full-width, .neto-container, .section-title { grid-column: span 1; }
             .menu-container { grid-template-columns: 1fr; }
             .form-container { padding: 25px; }
-            #tituloFormulario { font-size: 1.6em; }
-            #inp_neto { font-size: 1.8em; }
+            .inp-neto-destacado { font-size: 1.8em; }
         }
     </style>
 </head>
@@ -197,7 +191,7 @@
                 <div class="card-body">
                     <h3><span class="card-icon">📈</span> Cotizador TIPO II</h3>
                     <p>Rango exclusivo:<br><strong style="font-size:1.2em;">$325,000 - $1,350,000</strong></p>
-                    <p style="font-size: 0.85em; color: #28a745; background: #f0fff4; padding: 5px; border-radius: 5px; font-weight: 600;">*Incluye cálculo de Plusvalía (3%).</p>
+                    <p style="font-size: 0.85em; color: #28a745; background: #f0fff4; padding: 5px; border-radius: 5px; font-weight: 600;">*Incluye Plusvalía (3% sobre valor de subcuenta).</p>
                 </div>
                 <div style="padding: 0 25px 25px;">
                     <button class="btn-menu" onclick="iniciarCotizador('tipo2')">Ingresar al Tipo II</button>
@@ -205,10 +199,22 @@
             </div>
 
             <div class="menu-card">
+                <div class="card-header-accent accent-purple"></div>
+                <div class="card-body">
+                    <h3><span class="card-icon">🤝</span> Corresidencial</h3>
+                    <p>Rango global:<br><strong style="font-size:1.2em;">$325,000 - $1,350,000</strong></p>
+                    <p style="font-size: 0.85em; color: var(--color-purple); background: #f3e5f5; padding: 5px; border-radius: 5px; font-weight: 600;">*Mancomunado. Plusvalía (3% sobre valor de subcuenta).</p>
+                </div>
+                <div style="padding: 0 25px 25px;">
+                    <button class="btn-menu btn-purple" onclick="iniciarCotizador('corresidencial')">Ingresar Corresidencial</button>
+                </div>
+            </div>
+
+            <div class="menu-card">
                 <div class="card-header-accent accent-dark"></div>
                 <div class="card-body">
                     <h3><span class="card-icon">📄</span> Unir PDFs</h3>
-                    <p>Herramienta externa de utilidad para fusionar varios documentos PDF en uno solo de forma rápida.</p>
+                    <p>Herramienta externa para fusionar documentos.</p>
                 </div>
                 <div style="padding: 0 25px 25px;">
                     <button class="btn-menu btn-dark" onclick="unirPDFs()">Ir a Herramienta</button>
@@ -224,27 +230,62 @@
             
             <div class="form-grid">
                 <div class="section-title">1. Información del Cliente</div>
-                <div class="full-width"><label>Nombre Completo:</label><input type="text" id="inp_cliente" placeholder="Ej. Juan Pérez Hernández"></div>
+                <div class="full-width"><label>Nombre Completo (Titular):</label><input type="text" id="inp_cliente" placeholder="Ej. Juan Pérez Hernández"></div>
+                
+                <div id="div_cliente2" class="full-width" style="display:none;">
+                    <label>Nombre Completo (Co-titular / Cliente 2):</label>
+                    <input type="text" id="inp_cliente2" placeholder="Ej. María Lopez (Segundo Cliente)">
+                </div>
+
                 <div><label>Fecha de Emisión:</label><input type="date" id="inp_fecha"></div>
 
                 <div class="section-title">2. Datos Financieros de la Operación</div>
+                
+                <div id="input_single_mode" class="single-mode-container">
+                    <label style="font-size: 1.1em; color: var(--color-secondary);">MONTO VALOR DE SUBCUENTA ($):</label>
+                    <input type="text" inputmode="numeric" id="inp_valor" placeholder="Ej: $500,000.00" 
+                           oninput="calcularDesglose()" 
+                           onblur="formatearInput(this)" 
+                           onfocus="desformatearInput(this)"
+                           style="font-size: 1.2em; font-weight: bold;">
+                </div>
+
+                <div id="input_dual_mode" class="dual-mode-container" style="display: none;">
+                    <div>
+                        <label style="color: var(--color-purple);">VALOR SUBCUENTA 1 ($):</label>
+                        <input type="text" inputmode="numeric" id="inp_valor1" placeholder="Ej: $250,000.00" 
+                               oninput="calcularDesglose()" 
+                               onblur="formatearInput(this)" 
+                               onfocus="desformatearInput(this)"
+                               style="font-weight: bold; border-color: var(--color-purple);">
+                    </div>
+                    <div>
+                        <label style="color: var(--color-purple);">VALOR SUBCUENTA 2 ($):</label>
+                        <input type="text" inputmode="numeric" id="inp_valor2" placeholder="Ej: $250,000.00" 
+                               oninput="calcularDesglose()" 
+                               onblur="formatearInput(this)" 
+                               onfocus="desformatearInput(this)"
+                               style="font-weight: bold; border-color: var(--color-purple);">
+                    </div>
+                    <div class="full-width" style="text-align: right; font-size: 0.9em; color: #666; margin-top: -15px;">
+                        Suma Total Subcuentas: <span id="lbl_suma_total" style="font-weight: bold;">$0.00</span>
+                    </div>
+                </div>
+
                 <div class="full-width">
-                    <label style="font-size: 1.1em; color: var(--color-secondary);">MONTO VALOR DE OPERACIÓN ($):</label>
-                    <input type="number" id="inp_valor" placeholder="Ej: 500000" oninput="calcularDesglose()" style="font-size: 1.2em; font-weight: bold;">
-                    
                     <div id="alertaRango" class="alerta">
                         <div style="display:flex; align-items:center; gap:10px;">
                             <span style="font-size: 1.5em;">⚠️</span>
                             <div>
-                                <strong>MONTO FUERA DE RANGO PERMITIDO.</strong><br>
-                                <span style="font-weight:normal; font-size:0.9em;">Por favor, verifica el cotizador seleccionado en el menú.</span>
+                                <strong>MONTO TOTAL FUERA DE RANGO.</strong><br>
+                                <span style="font-weight:normal; font-size:0.9em;">Verifica el cotizador seleccionado.</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div id="row_plusvalia" class="plusvalia-style" style="display: none;">
-                    <label>+ Plusvalía (3%):</label><input type="text" id="inp_plusvalia" readonly>
+                    <label>+ Plusvalía (3% sobre Subcuenta):</label><input type="text" id="inp_plusvalia" readonly>
                 </div>
                 
                 <div><label>- Costos de Compra:</label><input type="text" id="inp_costos_compra" readonly></div>
@@ -263,12 +304,28 @@
 
                 <div class="full-width"><label>Vista Previa Descuento:</label><input type="text" id="inp_leyenda_descuento" readonly style="font-style: italic; color: #d9534f; background: #fff5f5; border-color: #feb2b2;"></div>
                 
-                <div class="neto-container">
+                <div id="neto_single_mode" class="neto-container">
                     <label style="color: var(--color-secondary-dark); font-size: 1em;">MONTO NETO A RECIBIR (=):</label>
-                    <input type="text" id="inp_neto" readonly>
+                    <input type="text" id="inp_neto" readonly class="inp-neto-destacado">
                 </div>
 
-                <div class="section-title">3. Datos del Ejecutivo Responsable</div>
+                <div id="neto_dual_mode" class="neto-container" style="display: none; background: linear-gradient(135deg, #f3e5f5, #fdfbff); border-left-color: var(--color-purple);">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div>
+                            <label style="color: var(--color-purple-dark); font-size: 0.9em;">NETO CLIENTE 1 (Proporcional):</label>
+                            <input type="text" id="inp_neto1" readonly class="inp-neto-destacado" style="font-size: 1.5em;">
+                        </div>
+                        <div>
+                            <label style="color: var(--color-purple-dark); font-size: 0.9em;">NETO CLIENTE 2 (Proporcional):</label>
+                            <input type="text" id="inp_neto2" readonly class="inp-neto-destacado" style="font-size: 1.5em;">
+                        </div>
+                    </div>
+                    <div style="text-align: center; margin-top: 10px; color: #777; font-size: 0.9em;">
+                        Total Neto de la Operación: <span id="lbl_neto_total_dual" style="font-weight: bold;">$0.00</span>
+                    </div>
+                </div>
+
+                <div class="section-title">3. Datos del Ejecutivo</div>
                 <div class="full-width">
                     <label>Seleccionar Ejecutivo:</label>
                     <select id="inp_ejecutivo" onchange="cargarDatosEjecutivo()">
@@ -288,24 +345,27 @@
             <span class="modal-icon">🎉</span>
             <h3 style="margin-top:0; color: #28a745;">¡Documento Listo!</h3>
             <p style="margin-bottom: 15px; font-size: 1.1em;">La cotización se ha generado exitosamente.</p>
-            <p style="font-size: 0.9em; color: #777; background: #f9f9f9; padding: 10px; border-radius: 10px;">El archivo se encuentra en tu carpeta de <strong>Descargas</strong>.</p>
             <button class="modal-btn" onclick="cerrarModal()">Entendido, gracias</button>
         </div>
     </div>
 
     <script>
-        // EL JAVASCRIPT PERMANECE EXACTAMENTE IGUAL QUE EN LA VERSIÓN 13.0
-        // NO FUE NECESARIO MODIFICAR LA LÓGICA, SOLO EL DISEÑO VISUAL.
-        
         const configuracion = {
-            'tipo1': { pdf: 'Tipo 1.pdf', titulo: 'Cotizador TIPO I', min: 180000, max: 325000 },
-            'tipo2': { pdf: 'Tipo 2.pdf', titulo: 'Cotizador TIPO II', min: 325000, max: 1350000 }
+            'tipo1': { pdf: 'Tipo 1.pdf', titulo: 'Cotizador TIPO I', min: 180000, max: 325000, isDual: false },
+            'tipo2': { pdf: 'Tipo 2.pdf', titulo: 'Cotizador TIPO II', min: 325000, max: 1350000, isDual: false },
+            'corresidencial': { pdf: 'Corresidencial.pdf', titulo: 'Cotizador CORRESIDENCIAL', min: 325000, max: 1350000, isDual: true }
         };
 
         let tipoActual = ""; let pdfUrl = "";
         const divMenu = document.getElementById('menuPrincipal');
         const divForm = document.getElementById('formularioWeb');
+        
+        const inputSingle = document.getElementById('input_single_mode');
+        const inputDual = document.getElementById('input_dual_mode');
+        const netoSingle = document.getElementById('neto_single_mode');
+        const netoDual = document.getElementById('neto_dual_mode');
         const rowPlusvalia = document.getElementById('row_plusvalia');
+        const divCliente2 = document.getElementById('div_cliente2');
         const alerta = document.getElementById('alertaRango');
         const btnGenerar = document.getElementById('btnGenerar');
         const modal = document.getElementById('modalExito');
@@ -339,6 +399,29 @@
             });
         })();
 
+        // --- FUNCIONES DE FORMATO DE INPUTS ---
+        function formatearInput(elem) {
+            if (!elem.value) return;
+            const valorLimpio = parseFloat(elem.value.replace(/[^0-9.]/g, ''));
+            if (!isNaN(valorLimpio)) {
+                elem.value = formatoDinero(valorLimpio);
+            }
+        }
+
+        function desformatearInput(elem) {
+            if (!elem.value) return;
+            // Muestra solo el número para editar
+            elem.value = elem.value.replace(/[^0-9.]/g, '');
+        }
+
+        function obtenerValorNumerico(idElemento) {
+            const val = document.getElementById(idElemento).value;
+            // Remueve todo lo que no sea número o punto
+            const limpio = val.replace(/[^0-9.]/g, '');
+            return parseFloat(limpio) || 0;
+        }
+        // ---------------------------------------
+
         function cargarDatosEjecutivo() {
             const nombre = document.getElementById('inp_ejecutivo').value;
             const ejecutivo = listaEjecutivos.find(e => e.nombre === nombre);
@@ -349,90 +432,162 @@
         function iniciarCotizador(tipo) {
             tipoActual = tipo;
             const config = configuracion[tipo];
+            
             divMenu.style.display = 'none';
             divForm.style.display = 'block';
             document.getElementById('tituloFormulario').innerText = config.titulo;
-            pdfUrl = config.pdf;
+            
+            pdfUrl = config.pdf; 
+            
             const rInfo = document.getElementById('rangoInfo');
-            rInfo.innerText = `Rango válido para este cotizador: ${formatoDinero(config.min)} — ${formatoDinero(config.max)}`;
-            if (tipo === 'tipo1') rowPlusvalia.style.display = 'none'; else rowPlusvalia.style.display = 'block';
-            limpiarCampos(); calcularDesglose(); window.scrollTo(0, 0);
+            rInfo.innerText = `Rango válido: ${formatoDinero(config.min)} — ${formatoDinero(config.max)}`;
+
+            if (config.isDual) {
+                inputSingle.style.display = 'none';
+                inputDual.style.display = 'grid';
+                netoSingle.style.display = 'none';
+                netoDual.style.display = 'block';
+                rowPlusvalia.style.display = 'block'; 
+                divCliente2.style.display = 'block'; 
+            } else {
+                inputSingle.style.display = 'block';
+                inputDual.style.display = 'none';
+                netoSingle.style.display = 'flex';
+                netoDual.style.display = 'none';
+                divCliente2.style.display = 'none'; 
+                
+                if (tipo === 'tipo2') rowPlusvalia.style.display = 'block';
+                else rowPlusvalia.style.display = 'none';
+            }
+
+            limpiarCampos();
+            calcularDesglose();
+            window.scrollTo(0, 0);
         }
 
         function regresarMenu() {
-            divForm.style.display = 'none'; divMenu.style.display = 'grid'; limpiarCampos(); window.scrollTo(0, 0);
+            divForm.style.display = 'none';
+            divMenu.style.display = 'grid';
+            limpiarCampos();
+            window.scrollTo(0, 0);
         }
 
         function limpiarCampos() {
+            document.getElementById('inp_cliente').value = '';
+            document.getElementById('inp_cliente2').value = '';
             document.getElementById('inp_valor').value = '';
-            document.getElementById('inp_porcentaje_descuento').value = '0';
             document.getElementById('inp_neto').value = '';
+            document.getElementById('inp_valor1').value = '';
+            document.getElementById('inp_valor2').value = '';
+            document.getElementById('inp_neto1').value = '';
+            document.getElementById('inp_neto2').value = '';
+            document.getElementById('lbl_suma_total').innerText = '$0.00';
+            document.getElementById('lbl_neto_total_dual').innerText = '$0.00';
+            
+            document.getElementById('inp_porcentaje_descuento').value = '0';
             document.getElementById('inp_plusvalia').value = '';
             document.getElementById('inp_costos_compra').value = '';
             document.getElementById('inp_costos_venta').value = '';
             document.getElementById('inp_honorarios').value = '';
             document.getElementById('inp_fecha').value = new Date().toISOString().split('T')[0];
-            alerta.style.display = 'none'; btnGenerar.disabled = false; btnGenerar.style.opacity = "1";
+            
+            alerta.style.display = 'none';
+            btnGenerar.disabled = false; btnGenerar.style.opacity = "1";
         }
 
-        function cerrarModal() { modal.style.display = 'none'; }
-
         function calcularDesglose() {
-            const valorInput = parseFloat(document.getElementById('inp_valor').value) || 0;
+            const config = configuracion[tipoActual];
+            let valorTotal = 0;
+            let val1 = 0; 
+            let val2 = 0;
+
+            // USAMOS LA FUNCIÓN obtenerValorNumerico PARA LEER LOS INPUTS AUNQUE TENGAN SIGNOS $
+            if (config.isDual) {
+                val1 = obtenerValorNumerico('inp_valor1');
+                val2 = obtenerValorNumerico('inp_valor2');
+                valorTotal = val1 + val2;
+                document.getElementById('lbl_suma_total').innerText = formatoDinero(valorTotal);
+            } else {
+                valorTotal = obtenerValorNumerico('inp_valor');
+            }
+
             const porcentajeInput = parseFloat(document.getElementById('inp_porcentaje_descuento').value) || 0;
             const porcentajeDecimal = porcentajeInput / 100; 
-            const config = configuracion[tipoActual];
 
-            if (valorInput > 0 && (valorInput < config.min || valorInput > config.max)) {
-                alerta.style.display = 'block'; btnGenerar.disabled = true; btnGenerar.style.opacity = "0.5";
-                document.getElementById('inp_neto').value = "$0.00";
-                document.getElementById('inp_costos_compra').value = ""; document.getElementById('inp_costos_venta').value = ""; document.getElementById('inp_honorarios').value = "";
+            if (valorTotal > 0 && (valorTotal < config.min || valorTotal > config.max)) {
+                alerta.style.display = 'block';
+                btnGenerar.disabled = true; btnGenerar.style.opacity = "0.5";
+                if(config.isDual) {
+                    document.getElementById('inp_neto1').value = "$0.00";
+                    document.getElementById('inp_neto2').value = "$0.00";
+                } else {
+                    document.getElementById('inp_neto').value = "$0.00";
+                }
                 return;
             } else {
-                alerta.style.display = 'none'; btnGenerar.disabled = false; btnGenerar.style.opacity = "1";
+                alerta.style.display = 'none';
+                btnGenerar.disabled = false; btnGenerar.style.opacity = "1";
             }
 
             let costosCompra = 0; let costosVenta = 0; let honorariosBase = 0; let plusvalia = 0;
 
             if (tipoActual === 'tipo1') {
                 plusvalia = 0;
-                if (valorInput >= 180000 && valorInput < 325000) { costosCompra = 18000; costosVenta = 7250; honorariosBase = 43000; } 
+                if (valorTotal >= 180000 && valorTotal < 325000) { 
+                    costosCompra = 18000; costosVenta = 7250; honorariosBase = 43000; 
+                } 
             }
-            else if (tipoActual === 'tipo2') {
-                if (valorInput >= 325000) {
-                    plusvalia = valorInput * 0.03;
-                    if (valorInput >= 325000 && valorInput < 375000) { costosCompra = 36000; costosVenta = 14500; honorariosBase = 50000; }
-                    else if (valorInput >= 375000 && valorInput < 450000) { costosCompra = 36000; costosVenta = 14500; honorariosBase = 55000; }
-                    else if (valorInput >= 450000 && valorInput < 500000) { costosCompra = 38000; costosVenta = 17000; honorariosBase = 59000; }
-                    else if (valorInput >= 500000 && valorInput < 650000) { costosCompra = 38000; costosVenta = 17000; honorariosBase = 70000; }
-                    else if (valorInput >= 650000 && valorInput < 800000) { costosCompra = 38000; costosVenta = 17000; honorariosBase = 85000; }
-                    else if (valorInput >= 800000 && valorInput < 950000) { costosCompra = 61000; costosVenta = 17000; honorariosBase = 97000; }
-                    else if (valorInput >= 950000 && valorInput < 1010000) { costosCompra = 61000; costosVenta = 17000; honorariosBase = 109000; }
-                    else if (valorInput >= 1010000 && valorInput < 1150000) { costosCompra = 75000; costosVenta = 17000; honorariosBase = 121000; }
-                    else if (valorInput >= 1150000 && valorInput < 1350000) { costosCompra = 75000; costosVenta = 17000; honorariosBase = 135000; }
-                    else if (valorInput >= 1350000) { costosCompra = 88000; costosVenta = 17000; honorariosBase = 155000; }
+            else if (tipoActual === 'tipo2' || tipoActual === 'corresidencial') {
+                if (valorTotal >= 325000) {
+                    plusvalia = valorTotal * 0.03;
+                    if (valorTotal >= 325000 && valorTotal < 375000) { costosCompra = 36000; costosVenta = 14500; honorariosBase = 50000; }
+                    else if (valorTotal >= 375000 && valorTotal < 450000) { costosCompra = 36000; costosVenta = 14500; honorariosBase = 55000; }
+                    else if (valorTotal >= 450000 && valorTotal < 500000) { costosCompra = 38000; costosVenta = 17000; honorariosBase = 59000; }
+                    else if (valorTotal >= 500000 && valorTotal < 650000) { costosCompra = 38000; costosVenta = 17000; honorariosBase = 70000; }
+                    else if (valorTotal >= 650000 && valorTotal < 800000) { costosCompra = 38000; costosVenta = 17000; honorariosBase = 85000; }
+                    else if (valorTotal >= 800000 && valorTotal < 950000) { costosCompra = 61000; costosVenta = 17000; honorariosBase = 97000; }
+                    else if (valorTotal >= 950000 && valorTotal < 1010000) { costosCompra = 61000; costosVenta = 17000; honorariosBase = 109000; }
+                    else if (valorTotal >= 1010000 && valorTotal < 1150000) { costosCompra = 75000; costosVenta = 17000; honorariosBase = 121000; }
+                    else if (valorTotal >= 1150000 && valorTotal < 1350000) { costosCompra = 75000; costosVenta = 17000; honorariosBase = 135000; }
+                    else if (valorTotal >= 1350000) { costosCompra = 88000; costosVenta = 17000; honorariosBase = 155000; }
                 }
             }
 
             const cantidadDescuento = honorariosBase * porcentajeDecimal;
             const honorariosFinal = honorariosBase - cantidadDescuento;
             const totalEgresos = costosCompra + costosVenta + honorariosFinal;
-            let neto = 0;
-            if (valorInput > 0) neto = valorInput - totalEgresos + plusvalia;
+            
+            let netoGlobal = 0;
+            if (valorTotal > 0) netoGlobal = valorTotal - totalEgresos + plusvalia;
 
             let textoDescuento = "";
-            if (porcentajeDecimal > 0) textoDescuento = "Descuento Aplicado (" + (porcentajeDecimal * 100) + "%): -" + cantidadDescuento.toFixed(2);
+            if (porcentajeDecimal > 0) textoDescuento = "Descuento (" + (porcentajeDecimal * 100) + "%): -" + cantidadDescuento.toFixed(2);
 
             document.getElementById('inp_plusvalia').value = formatoDinero(plusvalia);
             document.getElementById('inp_costos_compra').value = formatoDinero(costosCompra);
             document.getElementById('inp_costos_venta').value = formatoDinero(costosVenta);
             document.getElementById('inp_honorarios').value = formatoDinero(honorariosFinal);
             document.getElementById('inp_leyenda_descuento').value = textoDescuento;
-            document.getElementById('inp_neto').value = formatoDinero(neto);
 
+            if (config.isDual) {
+                const porcentaje1 = valorTotal > 0 ? (val1 / valorTotal) : 0;
+                const porcentaje2 = valorTotal > 0 ? (val2 / valorTotal) : 0;
+                const neto1 = netoGlobal * porcentaje1;
+                const neto2 = netoGlobal * porcentaje2;
+
+                document.getElementById('inp_neto1').value = formatoDinero(neto1);
+                document.getElementById('inp_neto2').value = formatoDinero(neto2);
+                document.getElementById('lbl_neto_total_dual').innerText = formatoDinero(netoGlobal);
+            } else {
+                document.getElementById('inp_neto').value = formatoDinero(netoGlobal);
+            }
+
+            // Guardamos datos crudos para PDF
             divForm.dataset.honorariosFinal = honorariosFinal.toFixed(2);
             divForm.dataset.plusvalia = plusvalia.toFixed(2);
             divForm.dataset.textoDescuento = textoDescuento;
+            divForm.dataset.valorTotalPDF = valorTotal;
+            divForm.dataset.netoTotalPDF = netoGlobal;
         }
 
         function formatoDinero(num) { return new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(num); }
@@ -442,36 +597,88 @@
             const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
             return `${dia} de ${meses[parseInt(mes) - 1]} ${anio}`;
         }
+        
+        function cerrarModal() { modal.style.display = 'none'; }
+        function unirPDFs() { window.open('https://www.ilovepdf.com/es/unir_pdf', '_blank'); }
 
         async function generarPDF() {
             const { PDFDocument } = PDFLib; if(!pdfUrl) return;
-            const valor = document.getElementById('inp_valor').value;
+            
             const fechaBonita = formatearFechaTexto(document.getElementById('inp_fecha').value);
+            const config = configuracion[tipoActual];
+            
+            // Recuperar valores numéricos crudos guardados en el dataset o calcularlos
+            let valParaPDF = 0;
+            let netoParaPDF = 0;
+            
+            if (config.isDual) {
+                valParaPDF = parseFloat(divForm.dataset.valorTotalPDF);
+                netoParaPDF = parseFloat(divForm.dataset.netoTotalPDF);
+            } else {
+                valParaPDF = obtenerValorNumerico('inp_valor');
+                // Para el neto, como es readonly y tiene texto, lo limpiamos
+                netoParaPDF = document.getElementById('inp_neto').value.replace(/[^0-9.-]+/g,""); 
+            }
+
+            // --- LÓGICA DEL NOMBRE DEL ARCHIVO ---
+            const cliente1 = document.getElementById('inp_cliente').value.trim() || "Cliente";
+            const cliente2 = document.getElementById('inp_cliente2').value.trim();
+            
+            // Sanitizar nombres (quitar caracteres raros para el nombre de archivo)
+            const safeC1 = cliente1.replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ ]/g, "");
+            
+            let nombreArchivo = `Propuesta_${safeC1}.pdf`;
+            
+            if(config.isDual && cliente2) {
+                const safeC2 = cliente2.replace(/[^a-zA-Z0-9áéíóúÁÉÍÓÚñÑ ]/g, "");
+                nombreArchivo = `Propuesta_${safeC1}_y_${safeC2}.pdf`;
+            }
+            // -------------------------------------
 
             const mapDatos = {
                 'Cliente': document.getElementById('inp_cliente').value,
+                'Cliente2': document.getElementById('inp_cliente2').value, 
                 'Fecha': fechaBonita,
                 'Ejecutivo_Nombre': document.getElementById('inp_ejecutivo').value,
                 'Correo': document.getElementById('inp_correo').value,
                 'Telefono': document.getElementById('inp_telefono').value,
-                'valor': formatoDinero(valor),
+                'valor': formatoDinero(valParaPDF), // Se envía formateado $0,000.00 al PDF
                 'Plusvalia': formatoDinero(divForm.dataset.plusvalia),
                 'CostosCompra': document.getElementById('inp_costos_compra').value,
                 'CostosVenta': document.getElementById('inp_costos_venta').value,
                 'Honorarios': document.getElementById('inp_honorarios').value, 
                 'DescuentoHonorarios': divForm.dataset.textoDescuento,
-                'neto': document.getElementById('inp_neto').value
+                'neto': formatoDinero(netoParaPDF)
             };
+            
+            if(config.isDual) {
+                // Enviar los valores individuales formateados
+                mapDatos['Valor1'] = document.getElementById('inp_valor1').value; // Ya tiene formato por el onblur
+                mapDatos['Valor2'] = document.getElementById('inp_valor2').value;
+                mapDatos['Neto1'] = document.getElementById('inp_neto1').value;
+                mapDatos['Neto2'] = document.getElementById('inp_neto2').value;
+            }
+
             try {
                 const existingPdfBytes = await fetch(pdfUrl).then(res => res.arrayBuffer());
                 const pdfDoc = await PDFDocument.load(existingPdfBytes);
                 const form = pdfDoc.getForm();
-                for (const [campoPDF, valorWeb] of Object.entries(mapDatos)) { try { form.getTextField(campoPDF).setText(valorWeb); } catch (e) {} }
+                
+                for (const [campoPDF, valorWeb] of Object.entries(mapDatos)) { 
+                    try { 
+                        const field = form.getTextField(campoPDF);
+                        if(field) field.setText(valorWeb); 
+                    } catch (e) {} 
+                }
+                
                 form.flatten(); 
                 const pdfBytes = await pdfDoc.save();
-                download(pdfBytes, `Cotizacion_${mapDatos['Cliente']}.pdf`, "application/pdf");
+                download(pdfBytes, nombreArchivo, "application/pdf");
                 modal.style.display = 'flex';
-            } catch (error) { console.error(error); alert("Error: Verifica nombre del PDF."); }
+            } catch (error) { 
+                console.error(error); 
+                alert("Error: No se encontró el archivo PDF plantilla (" + pdfUrl + "). Asegúrate de subirlo."); 
+            }
         }
 
         function download(data, filename, type) {
@@ -480,7 +687,6 @@
             a.href = url; a.download = filename; document.body.appendChild(a); a.click();
             setTimeout(function() { document.body.removeChild(a); window.URL.revokeObjectURL(url); }, 0); 
         }
-        function unirPDFs() { window.open('https://www.ilovepdf.com/es/unir_pdf', '_blank'); }
     </script>
 </body>
 </html>
