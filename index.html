@@ -31,11 +31,11 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* --- NUEVO HEADER MEJORADO --- */
+        /* --- HEADER ESTILO HERO --- */
         header { 
             width: 100%; 
-            background: linear-gradient(135deg, #FF8C00, #FF4500); /* Naranja más vibrante */
-            padding: 35px 20px 60px; /* Más espacio abajo para la curva */
+            background: linear-gradient(135deg, #FF8C00, #FF4500);
+            padding: 35px 20px 60px;
             text-align: center; color: white; 
             box-shadow: 0 10px 30px rgba(255, 69, 0, 0.3);
             position: relative; 
@@ -45,7 +45,6 @@
             overflow: hidden;
         }
         
-        /* Efecto de brillo decorativo en el header */
         header::before {
             content: '';
             position: absolute;
@@ -58,26 +57,13 @@
         .header-content { position: relative; z-index: 2; }
 
         h1 { 
-            margin: 0; 
-            font-size: 1.8em; 
-            letter-spacing: 1px; 
-            text-transform: uppercase; 
-            font-weight: 800; 
-            line-height: 1.1; 
-            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
+            margin: 0; font-size: 1.8em; letter-spacing: 1px; text-transform: uppercase; font-weight: 800; 
+            line-height: 1.1; text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            display: flex; align-items: center; justify-content: center; gap: 10px;
         }
 
         .subtitle {
-            margin-top: 5px;
-            font-size: 0.85em;
-            opacity: 0.9;
-            font-weight: 400;
-            letter-spacing: 2px;
-            text-transform: uppercase;
+            margin-top: 5px; font-size: 0.85em; opacity: 0.9; font-weight: 400; letter-spacing: 2px; text-transform: uppercase;
         }
         
         .content { width: 95%; max-width: 1100px; margin: -30px auto 20px; padding: 0; position: relative; z-index: 1; }
@@ -90,7 +76,6 @@
             text-align: center; box-shadow: var(--shadow-md);
             transition: transform 0.2s ease, box-shadow 0.2s ease; border: none;
             display: flex; flex-direction: column; justify-content: space-between;
-            position: relative;
         }
         .menu-card:active { transform: scale(0.98); }
         .menu-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
@@ -112,8 +97,7 @@
         .btn-menu { 
             background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)); 
             color: white; border: none; padding: 14px; width: 100%; border-radius: 10px; cursor: pointer; 
-            font-weight: 700; font-size: 1.05em; box-shadow: var(--shadow-sm);
-            transition: filter 0.2s;
+            font-weight: 700; font-size: 1.05em; box-shadow: var(--shadow-sm); transition: filter 0.2s;
         }
         .btn-menu:hover { filter: brightness(1.1); }
         
@@ -246,7 +230,7 @@
                 <div class="card-header-accent accent-orange"></div>
                 <div class="card-body">
                     <h3><span class="card-icon">📈</span> TIPO II</h3>
-                    <p>Rango exclusivo:<br><strong>$370,000 - $1,350,000</strong></p>
+                    <p>Rango exclusivo:<br><strong>$325,000 - $1,350,000</strong></p>
                     <p style="font-size: 0.8em; color: #28a745; background: #f0fff4; padding: 5px; border-radius: 5px; font-weight: 600;">*Plusvalía: 3% s/Subcuenta</p>
                     <button class="btn-menu" onclick="iniciarCotizador('tipo2')">Ingresar</button>
                 </div>
@@ -256,7 +240,7 @@
                 <div class="card-header-accent accent-purple"></div>
                 <div class="card-body">
                     <h3><span class="card-icon">🤝</span> Corresidencial</h3>
-                    <p>Rango global:<br><strong>$370,000 - $1,350,000</strong></p>
+                    <p>Rango global:<br><strong>$325,000 - $1,350,000</strong></p>
                     <p style="font-size: 0.8em; color: var(--color-purple); background: #f3e5f5; padding: 5px; border-radius: 5px; font-weight: 600;">*Mancomunado. Plusvalía: 3% s/Subcuenta</p>
                     <button class="btn-menu btn-purple" onclick="iniciarCotizador('corresidencial')">Ingresar</button>
                 </div>
@@ -280,6 +264,7 @@
             
             <div class="form-grid">
                 <div class="section-title">1. Información del Cliente</div>
+                
                 <div class="full-width">
                     <label>Nombre (Titular):</label>
                     <input type="text" id="inp_cliente" placeholder="Ej. JUAN PÉREZ" style="text-transform: uppercase;">
@@ -397,11 +382,11 @@
     </div>
 
     <script>
-        // CONFIGURACION ACTUALIZADA
+        // --- CONFIGURACIÓN DE RANGOS CORREGIDA ---
         const configuracion = {
             'tipo1': { pdf: 'Tipo 1.pdf', titulo: 'Cotizador TIPO I', min: 180000, max: 370000, isDual: false },
-            'tipo2': { pdf: 'Tipo 2.pdf', titulo: 'Cotizador TIPO II', min: 370000, max: 1350000, isDual: false },
-            'corresidencial': { pdf: 'Corresidencial.pdf', titulo: 'Cotizador CORRESIDENCIAL', min: 370000, max: 1350000, isDual: true }
+            'tipo2': { pdf: 'Tipo 2.pdf', titulo: 'Cotizador TIPO II', min: 325000, max: 1350000, isDual: false },
+            'corresidencial': { pdf: 'Corresidencial.pdf', titulo: 'Cotizador CORRESIDENCIAL', min: 325000, max: 1350000, isDual: true }
         };
 
         let tipoActual = ""; let pdfUrl = "";
@@ -544,6 +529,7 @@
 
             const porcentajeDecimal = (parseFloat(document.getElementById('inp_porcentaje_descuento').value) || 0) / 100; 
 
+            // Validación Rango General
             if (valorTotal > 0 && (valorTotal < config.min || valorTotal > config.max)) {
                 alerta.style.display = 'block';
                 btnGenerar.disabled = true; 
@@ -561,18 +547,19 @@
 
             let costosCompra = 0; let costosVenta = 0; let honorariosBase = 0; let plusvalia = 0;
 
+            // --- LÓGICA TIPO 1 (Expandida hasta 370,000) ---
             if (tipoActual === 'tipo1') {
                 plusvalia = 0;
-                // RANGO EXTENDIDO
-                if (valorTotal >= 180000 && valorTotal < 370000) { 
+                if (valorTotal >= 180000 && valorTotal <= 370000) { 
                     costosCompra = 18000; costosVenta = 7250; honorariosBase = 43000; 
                 } 
             }
+            // --- LÓGICA TIPO 2 y CORRESIDENCIAL (Desde 325,000) ---
             else if (tipoActual === 'tipo2' || tipoActual === 'corresidencial') {
-                // INICIA EN 370k
-                if (valorTotal >= 370000) {
+                if (valorTotal >= 325000) {
                     plusvalia = valorTotal * 0.03;
-                    if (valorTotal >= 370000 && valorTotal < 375000) { costosCompra = 36000; costosVenta = 14500; honorariosBase = 50000; }
+                    // Se inicia desde 325,000 con la primera tarifa
+                    if (valorTotal >= 325000 && valorTotal < 375000) { costosCompra = 36000; costosVenta = 14500; honorariosBase = 50000; }
                     else if (valorTotal >= 375000 && valorTotal < 450000) { costosCompra = 36000; costosVenta = 14500; honorariosBase = 55000; }
                     else if (valorTotal >= 450000 && valorTotal < 500000) { costosCompra = 38000; costosVenta = 17000; honorariosBase = 59000; }
                     else if (valorTotal >= 500000 && valorTotal < 650000) { costosCompra = 38000; costosVenta = 17000; honorariosBase = 70000; }
@@ -645,6 +632,7 @@
                 netoParaPDF = document.getElementById('inp_neto').value.replace(/[^0-9.-]+/g,""); 
             }
 
+            // --- FORZAR MAYÚSCULAS ---
             const cliente1 = (document.getElementById('inp_cliente').value.trim() || "CLIENTE").toUpperCase();
             const cliente2 = document.getElementById('inp_cliente2').value.trim().toUpperCase();
             
