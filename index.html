@@ -5,203 +5,224 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Cotizadores CASH4U</title>
     <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700;800&display=swap" rel="stylesheet">
     
     <style>
-        /* --- ESTILOS GENERALES --- */
+        /* --- VARIABLES Y RESET --- */
         :root {
             --color-primary: #FF7F00;
             --color-primary-dark: #e65100;
             --color-secondary: #007BFF;
             --color-secondary-dark: #0056b3;
-            --color-purple: #6f42c1; 
-            --color-purple-dark: #5a32a3;
-            --color-bg: #f0f2f5;
+            --color-success: #28a745;
+            --color-purple: #6f42c1;
+            --color-bg: #f4f6f9;
             --color-text: #333;
-            --shadow-sm: 0 2px 8px rgba(0,0,0,0.05);
-            --shadow-md: 0 8px 24px rgba(0,0,0,0.08);
-            --shadow-lg: 0 15px 35px rgba(0,0,0,0.15);
+            --shadow-card: 0 8px 20px rgba(0,0,0,0.06);
         }
+
+        * { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
 
         body { 
             font-family: 'Poppins', sans-serif; 
             margin: 0; padding: 0; 
             display: flex; flex-direction: column; align-items: center; 
             background-color: var(--color-bg); color: var(--color-text); 
-            -webkit-font-smoothing: antialiased;
+            padding-bottom: 100px; /* Espacio para Sticky Bar */
         }
 
-        /* --- HEADER ESTILO HERO --- */
+        /* --- HEADER --- */
         header { 
             width: 100%; 
             background: linear-gradient(135deg, #FF8C00, #FF4500);
-            padding: 35px 20px 60px;
+            padding: 30px 20px 60px;
             text-align: center; color: white; 
-            box-shadow: 0 10px 30px rgba(255, 69, 0, 0.3);
-            position: relative; 
-            z-index: 10;
-            border-bottom-left-radius: 50% 20px;
-            border-bottom-right-radius: 50% 20px;
-            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(255, 69, 0, 0.2);
+            position: relative; z-index: 10;
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
         }
         
-        header::before {
-            content: '';
-            position: absolute;
-            top: -50%; left: -50%;
-            width: 200%; height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
-            pointer-events: none;
-        }
-
-        .header-content { position: relative; z-index: 2; }
-
         h1 { 
-            margin: 0; font-size: 1.8em; letter-spacing: 1px; text-transform: uppercase; font-weight: 800; 
-            line-height: 1.1; text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            margin: 0; font-size: 1.6em; letter-spacing: 1px; text-transform: uppercase; font-weight: 800; 
+            line-height: 1.1; text-shadow: 0 2px 4px rgba(0,0,0,0.1);
             display: flex; align-items: center; justify-content: center; gap: 10px;
         }
 
-        .subtitle {
-            margin-top: 5px; font-size: 0.85em; opacity: 0.9; font-weight: 400; letter-spacing: 2px; text-transform: uppercase;
-        }
+        .subtitle { margin-top: 5px; font-size: 0.8em; opacity: 0.95; font-weight: 400; letter-spacing: 1px; text-transform: uppercase; }
         
-        .content { width: 95%; max-width: 1100px; margin: -30px auto 20px; padding: 0; position: relative; z-index: 1; }
+        .content { width: 94%; max-width: 1100px; margin: -35px auto 0; position: relative; z-index: 1; }
 
         /* --- MENÚ PRINCIPAL --- */
-        .menu-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; padding: 5px; }
+        .menu-container { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 15px; padding: 10px 5px; 
+        }
         
         .menu-card { 
             background: white; border-radius: 15px; overflow: hidden;
-            text-align: center; box-shadow: var(--shadow-md);
-            transition: transform 0.2s ease, box-shadow 0.2s ease; border: none;
+            text-align: center; box-shadow: var(--shadow-card);
+            transition: transform 0.2s; border: none;
             display: flex; flex-direction: column; justify-content: space-between;
         }
         .menu-card:active { transform: scale(0.98); }
-        .menu-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
-        
+
         .card-header-accent { height: 6px; width: 100%; }
         .accent-orange { background: linear-gradient(to right, var(--color-primary), #ffd700); }
         .accent-purple { background: linear-gradient(to right, var(--color-purple), #d63384); }
         .accent-dark { background: linear-gradient(to right, #333, #666); }
 
-        .card-body { padding: 25px 20px; }
+        .card-body { padding: 25px 20px; display: flex; flex-direction: column; height: 100%; }
+        .menu-card h3 { margin: 0 0 10px 0; font-size: 1.4em; font-weight: 700; color: #333; }
         
-        .menu-card h3 { 
-            color: var(--color-text); margin-top: 0; font-size: 1.3em; font-weight: 700; 
-            display: flex; align-items: center; justify-content: center; gap: 8px;
-        }
-        .card-icon { font-size: 1.5em; }
-        .menu-card p { color: #666; line-height: 1.5; font-size: 0.95em; margin-bottom: 20px; }
-        
+        .range-text { margin-bottom: 15px; line-height: 1.4; color: #555; font-size: 0.9em; }
+        .range-amount { font-size: 1.1em; font-weight: 700; color: #333; display: block; margin-top: 5px; }
+        .info-pill { font-size: 0.8em; padding: 6px 10px; border-radius: 6px; margin-bottom: 20px; display: block; }
+        .pill-gray { background: #f9f9f9; color: #888; }
+        .pill-green { background: #f0fff4; color: #28a745; font-weight: 600; }
+        .pill-purple { background: #f3e5f5; color: var(--color-purple); font-weight: 600; }
+
+        .btn-menu-wrapper { padding: 0 20px 25px; margin-top: auto; }
         .btn-menu { 
             background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)); 
-            color: white; border: none; padding: 14px; width: 100%; border-radius: 10px; cursor: pointer; 
-            font-weight: 700; font-size: 1.05em; box-shadow: var(--shadow-sm); transition: filter 0.2s;
+            color: white; border: none; padding: 12px; width: 100%; border-radius: 10px; cursor: pointer; 
+            font-weight: 700; font-size: 1em; box-shadow: 0 3px 6px rgba(0,0,0,0.1);
         }
-        .btn-menu:hover { filter: brightness(1.1); }
-        
-        .btn-purple { background: linear-gradient(135deg, var(--color-purple), var(--color-purple-dark)); }
+        .btn-menu:active { transform: scale(0.98); }
         .btn-dark { background: linear-gradient(135deg, #333, #555); }
 
         /* --- FORMULARIO --- */
         .form-container { 
-            background-color: white; padding: 35px; border-radius: 20px; 
-            box-shadow: var(--shadow-lg); display: none; margin: 10px auto; 
+            background-color: white; padding: 25px; border-radius: 20px; 
+            box-shadow: var(--shadow-card); display: none; margin-top: 10px; 
             position: relative; border-top: 5px solid var(--color-secondary);
         }
         
+        .header-form { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
         .btn-back { 
-            background-color: #eff2f7; color: #555; border: none; padding: 8px 16px; 
-            border-radius: 30px; cursor: pointer; margin-bottom: 20px; display: inline-flex; 
-            align-items: center; gap: 6px; font-weight: 600; font-size: 0.9em; transition: background 0.2s;
+            background: #eff2f7; color: #555; border: none; padding: 8px 14px; 
+            border-radius: 30px; cursor: pointer; font-weight: 600; font-size: 0.85em; 
+            display: inline-flex; align-items: center; gap: 5px; 
         }
-        .btn-back:hover { background-color: #e0e3e9; }
         
-        #tituloFormulario { text-align: center; color: var(--color-secondary); font-size: 1.8em; margin: 5px 0; font-weight: 800; }
-        #rangoInfo { text-align: center; color: #777; font-style: italic; font-size: 0.9em; margin-bottom: 25px; display: block; background: #f0f8ff; padding: 8px 15px; border-radius: 20px; }
+        #tituloFormulario { margin: 0; color: var(--color-secondary); font-size: 1.4em; font-weight: 800; }
+        #rangoInfo { display: block; font-size: 0.8em; color: #777; font-style: italic; width: 100%; text-align: right; }
 
+        /* --- GRID SYSTEM (DESKTOP) --- */
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .full-width { grid-column: span 2; }
+        .dual-mode-container, .neto-dual-grid { grid-column: span 2; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+        /* --- INPUTS FLOTANTES --- */
+        .floating-group { position: relative; margin-bottom: 5px; width: 100%; }
         
-        label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 0.85em; color: #555; text-transform: uppercase; letter-spacing: 0.5px; }
-        
-        input, select { 
-            padding: 14px; font-size: 16px; width: 100%; box-sizing: border-box; 
-            border: 2px solid #e1e1e1; border-radius: 12px; background: #fcfcfc; 
-            font-family: 'Poppins', sans-serif; appearance: none; transition: border-color 0.2s;
+        .floating-input, .floating-select {
+            width: 100%; padding: 24px 15px 8px 15px; /* Más padding arriba para evitar choque */
+            font-size: 16px; font-weight: 600; color: #333;
+            border: 2px solid #eef0f2; border-radius: 12px; 
+            background: #fcfcfc; transition: all 0.2s ease;
+            font-family: 'Poppins', sans-serif; height: 58px; /* Altura fija segura */
+            appearance: none;
         }
-        input:focus, select:focus { 
-            border-color: var(--color-secondary); background: #fff; outline: none; 
-        }
         
-        input[readonly] { background-color: #f2f4f8; color: #666; font-weight: 600; border-color: transparent; cursor: default; }
+        .floating-label {
+            position: absolute; left: 15px; top: 18px;
+            color: #888; font-size: 14px; font-weight: 500; pointer-events: none;
+            transition: 0.2s ease all; text-transform: uppercase; letter-spacing: 0.5px;
+            background-color: transparent;
+        }
+
+        .floating-input:focus, .floating-select:focus { border-color: var(--color-secondary); background: #fff; }
+        
+        .floating-input:focus ~ .floating-label,
+        .floating-input:not(:placeholder-shown) ~ .floating-label,
+        .floating-select:focus ~ .floating-label,
+        .floating-select:valid ~ .floating-label {
+            top: 6px; font-size: 10px; color: var(--color-secondary); font-weight: 700;
+        }
+
+        .floating-input.valid-range { border-color: var(--color-success); background-color: #fafffc; }
+        .floating-input[readonly] { background-color: #f8f9fa; color: #666; border-color: transparent; }
+
+        /* --- EJECUTIVO --- */
+        .verify-row { grid-column: span 2; display: flex; align-items: center; gap: 10px; margin-bottom: 5px; }
+        .verify-input-wrapper { flex-grow: 1; position: relative; }
+        .action-icons { display: flex; gap: 8px; align-items: center; }
+        .icon-check { color: var(--color-success); background: #e6fffa; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; opacity: 0; font-size: 0.9em; }
+        .icon-check.visible { opacity: 1; }
+        .btn-edit { background: #f0f2f5; border: none; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1em; }
+
+        /* --- NETOS --- */
+        .neto-container {
+            grid-column: span 2; background: #eff6ff; border-radius: 16px; padding: 15px;
+            border: 1px solid #dbeafe; display: flex; flex-direction: column; align-items: center;
+        }
+        .neto-label { font-size: 0.85em; color: #64748b; font-weight: 600; text-transform: uppercase; }
+        .neto-display { font-size: 2em; font-weight: 800; color: var(--color-secondary); text-shadow: 0 2px 0 rgba(255,255,255,0.8); }
+
+        /* --- STICKY BAR --- */
+        .sticky-bar {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: rgba(30, 30, 35, 0.95); backdrop-filter: blur(10px);
+            color: white; padding: 15px 20px; z-index: 100;
+            display: none; justify-content: space-between; align-items: center;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
+            border-top-left-radius: 15px; border-top-right-radius: 15px;
+        }
 
         .section-title { 
-            grid-column: span 2; border-bottom: none; margin-top: 25px; margin-bottom: 10px; 
-            padding-bottom: 5px; color: var(--color-secondary); font-weight: 700; font-size: 1.1em;
-            position: relative; display: flex; align-items: center; gap: 10px;
+            grid-column: span 2; margin: 25px 0 10px; color: var(--color-secondary); 
+            font-weight: 700; font-size: 1.1em; display: flex; align-items: center; gap: 8px;
         }
-        .section-title::before { content: ''; width: 6px; height: 6px; background: var(--color-secondary); border-radius: 50%; display: inline-block; }
-        .section-title::after { content: ''; position: absolute; bottom: 0; left: 16px; width: 40px; height: 3px; background: var(--color-secondary); border-radius: 3px; opacity: 0.5; }
+        .section-title::before { content: ''; width: 6px; height: 6px; background: currentColor; border-radius: 50%; }
 
-        /* Estilos específicos para Dual/Single */
-        .single-mode-container { grid-column: span 2; }
-        .dual-mode-container { grid-column: span 2; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .neto-dual-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-
-        /* Área de Neto Destacada */
-        .neto-container {
-            grid-column: span 2;
-            background: linear-gradient(135deg, #e3f2fd, #f1f8ff);
-            padding: 25px; border-radius: 15px;
-            border-left: 6px solid var(--color-secondary);
-            box-shadow: var(--shadow-sm);
-            display: flex; flex-direction: column;
-        }
-        .inp-neto-destacado {
-            background: transparent !important; border: none !important; box-shadow: none !important; padding: 5px 0;
-            font-size: 2em; color: var(--color-secondary-dark); font-weight: 800;
-            text-shadow: 1px 1px 1px rgba(255,255,255,0.5); width: 100%;
-        }
+        .alerta { background: #fee2e2; color: #991b1b; padding: 12px; border-radius: 10px; font-weight: 600; display: none; margin-top: 10px; border: 1px solid #fca5a5; font-size: 0.9em; }
 
         .btn-action { 
-            background: linear-gradient(135deg, var(--color-secondary), var(--color-secondary-dark));
-            width: 100%; margin-top: 25px; font-size: 1.1em; font-weight: 700; padding: 18px; border: none; color: white; border-radius: 12px; cursor: pointer; 
-            box-shadow: 0 8px 20px rgba(0, 123, 255, 0.3); transition: transform 0.2s, box-shadow 0.2s;
+            width: 100%; margin-top: 25px; padding: 16px; border: none; border-radius: 12px;
+            background: linear-gradient(135deg, var(--color-secondary), #0056b3);
+            color: white; font-size: 1.1em; font-weight: 700; cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0, 123, 255, 0.3);
         }
-        .btn-action:active { transform: translateY(2px); }
-        .btn-action:disabled { background: #ccc; box-shadow: none; transform: none; }
         
-        .alerta { background-color: #fff5f5; color: #c53030; border-left: 4px solid #c53030; padding: 15px; border-radius: 8px; font-weight: 600; margin-top: 15px; display: none; }
-        .plusvalia-style input { color: #28a745; background-color: #f0fff4; border: 2px solid #c6f6d5; font-weight: bold; }
+        /* Modal */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 2000; }
+        .modal-box { background: white; padding: 25px; border-radius: 20px; text-align: center; max-width: 300px; width: 85%; }
+        .modal-btn { background: #28a745; color: white; padding: 10px 25px; border-radius: 50px; border: none; font-weight: bold; margin-top: 15px; width: 100%; }
+        
+        .fade-in { animation: fadeIn 0.4s ease forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* MODAL */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 2000; backdrop-filter: blur(4px); }
-        .modal-box { background: white; padding: 30px; border-radius: 20px; text-align: center; max-width: 90%; width: 320px; box-shadow: var(--shadow-lg); animation: popIn 0.3s ease-out; }
-        .modal-icon { font-size: 50px; margin-bottom: 15px; display: block; }
-        .modal-btn { background: linear-gradient(135deg, #28a745, #218838); color: white; border: none; padding: 12px 30px; border-radius: 50px; cursor: pointer; font-size: 16px; margin-top: 15px; font-weight: 700; width: 100%; box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3); }
-        @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-
-        /* --- MEDIA QUERIES (MÓVIL) --- */
+        /* --- OPTIMIZACIÓN MÓVIL ESTRICTA --- */
         @media (max-width: 768px) {
-            header { padding-bottom: 50px; }
+            /* Header */
             h1 { font-size: 1.4em; }
-            .form-container { padding: 20px 15px; }
-            .menu-container { grid-template-columns: 1fr; } 
+            .content { margin-top: -25px; width: 95%; }
             
-            .form-grid, .dual-mode-container, .neto-dual-grid { 
-                grid-template-columns: 1fr !important; 
-                gap: 15px;
-            }
+            /* Menú: 1 Columna */
+            .menu-container { grid-template-columns: 1fr; padding: 0; }
             
-            .full-width, .neto-container, .section-title, .single-mode-container, .dual-mode-container { 
-                grid-column: span 1; 
-            }
-
-            .inp-neto-destacado { font-size: 1.8em; }
-            #neto_dual_mode label { font-size: 0.85em; }
-            .dual-mode-container > div { margin-bottom: 0; }
+            /* Formulario: Layout Flex Vertical (Rompe el Grid para evitar errores) */
+            .form-grid { display: flex; flex-direction: column; gap: 15px; }
+            .full-width, .neto-container, .section-title, .single-mode-container { width: 100%; margin: 0; }
+            
+            /* Contenedores Duales en Móvil */
+            .dual-mode-container, .neto-dual-grid { display: flex; flex-direction: column; gap: 15px; }
+            
+            /* Ajustes de Texto */
+            .neto-display { font-size: 1.8em; }
+            .floating-label { font-size: 13px; }
+            
+            /* Sticky Bar visible */
+            .sticky-bar { display: flex; }
+            
+            /* Botón Generar más espacio abajo */
+            .btn-action { margin-bottom: 20px; }
+            
+            /* Ajuste Ejecutivo (iconos a la derecha, input ocupa resto) */
+            .verify-row { display: flex; width: 100%; align-items: center; }
+            .verify-input-wrapper { flex: 1; }
         }
     </style>
 </head>
@@ -214,175 +235,139 @@
     </header>
 
     <div class="content">
-
-        <div id="menuPrincipal" class="menu-container">
+        <div id="menuPrincipal" class="menu-container fade-in">
             <div class="menu-card">
                 <div class="card-header-accent accent-orange"></div>
                 <div class="card-body">
                     <h3><span class="card-icon">🏠</span> TIPO I</h3>
-                    <p>Rango exclusivo:<br><strong>$180,000 - $370,000</strong></p>
-                    <p style="font-size: 0.8em; color: #999; background: #f9f9f9; padding: 5px; border-radius: 5px;">*Sin plusvalía.</p>
-                    <button class="btn-menu" onclick="iniciarCotizador('tipo1')">Ingresar</button>
+                    <div class="range-text">Rango exclusivo:<br><span class="range-amount">$180,000 - $370,000</span></div>
+                    <div class="info-pill pill-gray">*Sin plusvalía.</div>
                 </div>
+                <div class="btn-menu-wrapper"><button class="btn-menu" onclick="iniciarCotizador('tipo1')">Ingresar</button></div>
             </div>
 
             <div class="menu-card">
                 <div class="card-header-accent accent-orange"></div>
                 <div class="card-body">
                     <h3><span class="card-icon">📈</span> TIPO II</h3>
-                    <p>Rango exclusivo:<br><strong>$325,000 - $1,350,000</strong></p>
-                    <p style="font-size: 0.8em; color: #28a745; background: #f0fff4; padding: 5px; border-radius: 5px; font-weight: 600;">*Plusvalía: 3% s/Subcuenta</p>
-                    <button class="btn-menu" onclick="iniciarCotizador('tipo2')">Ingresar</button>
+                    <div class="range-text">Rango exclusivo:<br><span class="range-amount">$325,000 - $1,350,000</span></div>
+                    <div class="info-pill pill-green">*Plusvalía: 3% s/Subcuenta</div>
                 </div>
+                <div class="btn-menu-wrapper"><button class="btn-menu" onclick="iniciarCotizador('tipo2')">Ingresar</button></div>
             </div>
 
             <div class="menu-card">
                 <div class="card-header-accent accent-purple"></div>
                 <div class="card-body">
                     <h3><span class="card-icon">🤝</span> Corresidencial</h3>
-                    <p>Rango global:<br><strong>$325,000 - $1,350,000</strong></p>
-                    <p style="font-size: 0.8em; color: var(--color-purple); background: #f3e5f5; padding: 5px; border-radius: 5px; font-weight: 600;">*Mancomunado. Plusvalía: 3% s/Subcuenta</p>
-                    <button class="btn-menu btn-purple" onclick="iniciarCotizador('corresidencial')">Ingresar</button>
+                    <div class="range-text">Rango global:<br><span class="range-amount">$325,000 - $1,350,000</span></div>
+                    <div class="info-pill pill-purple">*Mancomunado. Plusvalía: 3%</div>
                 </div>
+                <div class="btn-menu-wrapper"><button class="btn-menu" onclick="iniciarCotizador('corresidencial')">Ingresar</button></div>
             </div>
 
             <div class="menu-card">
                 <div class="card-header-accent accent-dark"></div>
                 <div class="card-body">
                     <h3><span class="card-icon">📄</span> Unir PDFs</h3>
-                    <p>Fusión de documentos.</p>
-                    <button class="btn-menu btn-dark" onclick="unirPDFs()">Ir a Herramienta</button>
+                    <div class="range-text">Herramienta externa<br>para fusionar documentos.</div>
                 </div>
+                <div class="btn-menu-wrapper"><button class="btn-menu btn-dark" onclick="unirPDFs()">Ir a Herramienta</button></div>
             </div>
         </div>
 
         <div id="formularioWeb" class="form-container">
-            <button class="btn-back" onclick="regresarMenu()"><span>❮</span> Menú Principal</button>
-
-            <h3 id="tituloFormulario">Cotización</h3>
-            <span id="rangoInfo"></span>
-            
-            <div class="form-grid">
-                <div class="section-title">1. Información del Cliente</div>
-                
-                <div class="full-width">
-                    <label>Nombre (Titular):</label>
-                    <input type="text" id="inp_cliente" placeholder="Ej. JUAN PÉREZ" style="text-transform: uppercase;">
-                </div>
-                
-                <div id="div_cliente2" class="full-width" style="display:none;">
-                    <label>Nombre (Co-titular):</label>
-                    <input type="text" id="inp_cliente2" placeholder="Ej. MARÍA LOPEZ" style="text-transform: uppercase;">
-                </div>
-
-                <div><label>Fecha de Emisión:</label><input type="date" id="inp_fecha"></div>
-
-                <div class="section-title">2. Datos Financieros</div>
-                
-                <div id="input_single_mode" class="single-mode-container">
-                    <label style="font-size: 1em; color: var(--color-secondary);">VALOR DE SUBCUENTA ($):</label>
-                    <input type="text" inputmode="numeric" id="inp_valor" placeholder="$0.00" 
-                           oninput="calcularDesglose()" onblur="formatearInput(this)" onfocus="desformatearInput(this)"
-                           style="font-size: 1.2em; font-weight: bold;">
-                </div>
-
-                <div id="input_dual_mode" class="dual-mode-container" style="display: none;">
-                    <div>
-                        <label style="color: var(--color-purple);">SUBCUENTA 1 ($):</label>
-                        <input type="text" inputmode="numeric" id="inp_valor1" placeholder="$0.00" 
-                               oninput="calcularDesglose()" onblur="formatearInput(this)" onfocus="desformatearInput(this)"
-                               style="font-weight: bold; border-color: var(--color-purple);">
-                    </div>
-                    <div>
-                        <label style="color: var(--color-purple);">SUBCUENTA 2 ($):</label>
-                        <input type="text" inputmode="numeric" id="inp_valor2" placeholder="$0.00" 
-                               oninput="calcularDesglose()" onblur="formatearInput(this)" onfocus="desformatearInput(this)"
-                               style="font-weight: bold; border-color: var(--color-purple);">
-                    </div>
-                    <div class="full-width" style="text-align: right; font-size: 0.9em; color: #666;">
-                        Suma Total: <span id="lbl_suma_total" style="font-weight: bold;">$0.00</span>
-                    </div>
-                </div>
-
-                <div class="full-width">
-                    <div id="alertaRango" class="alerta">
-                        <div style="display:flex; align-items:center; gap:10px;">
-                            <span style="font-size: 1.5em;">⚠️</span>
-                            <div>
-                                <strong>MONTO FUERA DE RANGO.</strong><br>
-                                <span style="font-weight:normal; font-size:0.9em;">Verifica el tipo de cotizador.</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="row_plusvalia" class="plusvalia-style full-width" style="display: none;">
-                    <label>+ Plusvalía (3%):</label><input type="text" id="inp_plusvalia" readonly>
-                </div>
-                
-                <div><label>- Costos Compra:</label><input type="text" id="inp_costos_compra" readonly></div>
-                <div><label>- Costos Venta:</label><input type="text" id="inp_costos_venta" readonly></div>
-                <div><label>- Honorarios Base:</label><input type="text" id="inp_honorarios" readonly></div>
-                
-                <div>
-                    <label>Descuento (%):</label>
-                    <select id="inp_porcentaje_descuento" onchange="calcularDesglose()">
-                        <option value="0">0% (Sin descuento)</option>
-                        <option value="5">5% Descuento</option>
-                        <option value="10">10% Descuento</option>
-                        <option value="15">15% Descuento</option>
-                    </select>
-                </div>
-
-                <div class="full-width"><label>Info Descuento:</label><input type="text" id="inp_leyenda_descuento" readonly style="font-style: italic; color: #d9534f; background: #fff5f5; border-color: #feb2b2; font-size: 0.9em;"></div>
-                
-                <div id="neto_single_mode" class="neto-container">
-                    <label style="color: var(--color-secondary-dark); font-size: 0.9em;">NETO A RECIBIR (=):</label>
-                    <input type="text" id="inp_neto" readonly class="inp-neto-destacado">
-                </div>
-
-                <div id="neto_dual_mode" class="neto-container" style="display: none; background: linear-gradient(135deg, #f3e5f5, #fdfbff); border-left-color: var(--color-purple);">
-                    <div class="neto-dual-grid">
-                        <div>
-                            <label style="color: var(--color-purple-dark); font-size: 0.85em;">NETO CLIENTE 1:</label>
-                            <input type="text" id="inp_neto1" readonly class="inp-neto-destacado" style="font-size: 1.6em;">
-                        </div>
-                        <div>
-                            <label style="color: var(--color-purple-dark); font-size: 0.85em;">NETO CLIENTE 2:</label>
-                            <input type="text" id="inp_neto2" readonly class="inp-neto-destacado" style="font-size: 1.6em;">
-                        </div>
-                    </div>
-                    <div style="text-align: center; margin-top: 15px; color: #777; font-size: 0.9em;">
-                        Total Neto: <span id="lbl_neto_total_dual" style="font-weight: bold;">$0.00</span>
-                    </div>
-                </div>
-
-                <div class="section-title">3. Ejecutivo</div>
-                <div class="full-width">
-                    <label>Ejecutivo:</label>
-                    <select id="inp_ejecutivo" onchange="cargarDatosEjecutivo()">
-                        <option value="">-- Seleccione --</option>
-                    </select>
-                </div>
-                <div><label>Email:</label><input type="text" id="inp_correo" readonly style="font-size: 0.9em;"></div>
-                <div><label>Teléfono:</label><input type="text" id="inp_telefono" readonly></div>
+            <div class="header-form">
+                <button class="btn-back" onclick="regresarMenu()">❮ Menú</button>
+                <div><h3 id="tituloFormulario">Cotización</h3><span id="rangoInfo"></span></div>
             </div>
             
-            <button id="btnGenerar" class="btn-action" onclick="generarPDF()">GENERAR PDF ✨</button>
+            <div class="form-grid">
+                <div class="section-title">1. Datos del Cliente</div>
+                <div class="full-width floating-group">
+                    <input type="text" id="inp_cliente" class="floating-input" placeholder=" " style="text-transform: uppercase;">
+                    <label class="floating-label">Nombre Completo (Titular)</label>
+                </div>
+                <div id="div_cliente2" class="full-width floating-group" style="display:none;">
+                    <input type="text" id="inp_cliente2" class="floating-input" placeholder=" " style="text-transform: uppercase;">
+                    <label class="floating-label">Nombre (Co-titular)</label>
+                </div>
+                <div class="floating-group">
+                    <input type="date" id="inp_fecha" class="floating-input" placeholder=" ">
+                    <label class="floating-label">Fecha</label>
+                </div>
+
+                <div class="section-title">2. Financiero</div>
+                <div id="input_single_mode" class="single-mode-container floating-group">
+                    <input type="text" inputmode="numeric" id="inp_valor" class="floating-input" placeholder=" "
+                           oninput="calcularDesglose()" onblur="formatearInput(this)" onfocus="desformatearInput(this)">
+                    <label class="floating-label">Valor Subcuenta ($)</label>
+                </div>
+                <div id="input_dual_mode" class="dual-mode-container" style="display: none;">
+                    <div class="floating-group">
+                        <input type="text" inputmode="numeric" id="inp_valor1" class="floating-input" placeholder=" "
+                               oninput="calcularDesglose()" onblur="formatearInput(this)" onfocus="desformatearInput(this)">
+                        <label class="floating-label">Subcuenta 1 ($)</label>
+                    </div>
+                    <div class="floating-group">
+                        <input type="text" inputmode="numeric" id="inp_valor2" class="floating-input" placeholder=" "
+                               oninput="calcularDesglose()" onblur="formatearInput(this)" onfocus="desformatearInput(this)">
+                        <label class="floating-label">Subcuenta 2 ($)</label>
+                    </div>
+                </div>
+
+                <div class="full-width" id="alertaRango" class="alerta"><div class="alerta">⚠️ Monto fuera de rango.</div></div>
+
+                <div id="row_plusvalia" class="full-width floating-group" style="display: none;">
+                    <input type="text" id="inp_plusvalia" class="floating-input" readonly placeholder=" ">
+                    <label class="floating-label">Plusvalía (3%)</label>
+                </div>
+                <div class="floating-group"><input type="text" id="inp_costos_compra" class="floating-input" readonly placeholder=" "><label class="floating-label">Costos Compra</label></div>
+                <div class="floating-group"><input type="text" id="inp_costos_venta" class="floating-input" readonly placeholder=" "><label class="floating-label">Costos Venta</label></div>
+                <div class="floating-group">
+                    <select id="inp_porcentaje_descuento" class="floating-select" onchange="calcularDesglose()" required>
+                        <option value="0" selected>0%</option><option value="5">5%</option><option value="10">10%</option><option value="15">15%</option>
+                    </select>
+                    <label class="floating-label">Descuento</label>
+                </div>
+                <div class="floating-group"><input type="text" id="inp_honorarios" class="floating-input" readonly placeholder=" "><label class="floating-label">Honorarios Base</label></div>
+                <div class="full-width floating-group"><input type="text" id="inp_leyenda_descuento" class="floating-input" readonly placeholder=" " style="color: #e11d48; font-style: italic;"><label class="floating-label">Descuento Aplicado</label></div>
+
+                <div id="neto_single_mode" class="neto-container"><span class="neto-label">Neto a Recibir</span><span id="display_neto" class="neto-display">$0.00</span><input type="hidden" id="inp_neto"></div>
+                <div id="neto_dual_mode" class="neto-dual-grid" style="display:none;">
+                    <div class="neto-container"><span class="neto-label">Neto Cliente 1</span><span id="display_neto1" class="neto-display" style="font-size: 1.5em;">$0.00</span><input type="hidden" id="inp_neto1"></div>
+                    <div class="neto-container"><span class="neto-label">Neto Cliente 2</span><span id="display_neto2" class="neto-display" style="font-size: 1.5em;">$0.00</span><input type="hidden" id="inp_neto2"></div>
+                </div>
+
+                <div class="section-title">3. Ejecutivo Responsable</div>
+                
+                <div class="verify-row">
+                    <div class="verify-input-wrapper">
+                        <select id="inp_ejecutivo" class="floating-select" onchange="cargarDatosEjecutivo()" required><option value="" disabled selected></option></select>
+                        <input type="text" id="inp_ejecutivo_manual" class="floating-input" style="display:none;" placeholder=" " oninput="checkManualName()">
+                        <label class="floating-label">Nombre Ejecutivo</label>
+                    </div>
+                    <div class="action-icons"><div id="check_nombre" class="icon-check">✓</div><button class="btn-edit" onclick="toggleEditName()">✏️</button></div>
+                </div>
+                <div class="verify-row">
+                    <div class="verify-input-wrapper"><input type="text" id="inp_correo" class="floating-input" readonly placeholder=" "><label class="floating-label">Correo</label></div>
+                    <div class="action-icons"><div id="check_correo" class="icon-check">✓</div><button class="btn-edit" onclick="enableField('inp_correo', 'check_correo')">✏️</button></div>
+                </div>
+                <div class="verify-row">
+                    <div class="verify-input-wrapper"><input type="text" id="inp_telefono" class="floating-input" readonly placeholder=" "><label class="floating-label">Teléfono</label></div>
+                    <div class="action-icons"><div id="check_telefono" class="icon-check">✓</div><button class="btn-edit" onclick="enableField('inp_telefono', 'check_telefono')">✏️</button></div>
+                </div>
+
+                <button id="btnGenerar" class="btn-action" onclick="generarPDF()">GENERAR PDF ✨</button>
+            </div>
         </div>
     </div>
 
-    <div id="modalExito" class="modal-overlay">
-        <div class="modal-box">
-            <span class="modal-icon">🎉</span>
-            <h3 style="margin-top:0; color: #28a745;">¡Listo!</h3>
-            <p style="margin-bottom: 15px;">Documento generado.</p>
-            <button class="modal-btn" onclick="cerrarModal()">Cerrar</button>
-        </div>
-    </div>
+    <div id="stickyBar" class="sticky-bar"><div class="sticky-label">Total a Recibir:</div><div id="sticky_value" style="font-weight:700; font-size: 1.4em; color: #4dabf7;">$0.00</div></div>
+
+    <div id="modalExito" class="modal-overlay"><div class="modal-box"><div style="font-size: 40px;">🎉</div><h3 style="margin: 10px 0; color: #333;">¡Listo!</h3><p style="color: #666;">Documento generado.</p><button class="modal-btn" onclick="cerrarModal()">Cerrar</button></div></div>
 
     <script>
-        // --- CONFIGURACIÓN DE RANGOS CORREGIDA ---
         const configuracion = {
             'tipo1': { pdf: 'Tipo 1.pdf', titulo: 'Cotizador TIPO I', min: 180000, max: 370000, isDual: false },
             'tipo2': { pdf: 'Tipo 2.pdf', titulo: 'Cotizador TIPO II', min: 325000, max: 1350000, isDual: false },
@@ -390,15 +375,19 @@
         };
 
         let tipoActual = ""; let pdfUrl = "";
+        let previousValues = { neto: 0, neto1: 0, neto2: 0 };
+        let manualNameMode = false;
+
         const divMenu = document.getElementById('menuPrincipal');
         const divForm = document.getElementById('formularioWeb');
+        const stickyBar = document.getElementById('stickyBar');
         const inputSingle = document.getElementById('input_single_mode');
         const inputDual = document.getElementById('input_dual_mode');
         const netoSingle = document.getElementById('neto_single_mode');
         const netoDual = document.getElementById('neto_dual_mode');
         const rowPlusvalia = document.getElementById('row_plusvalia');
         const divCliente2 = document.getElementById('div_cliente2');
-        const alerta = document.getElementById('alertaRango');
+        const alerta = document.querySelector('.alerta');
         const btnGenerar = document.getElementById('btnGenerar');
         const modal = document.getElementById('modalExito');
 
@@ -431,261 +420,232 @@
             });
         })();
 
+        function cargarDatosEjecutivo() {
+            if (manualNameMode) return;
+            const nombre = document.getElementById('inp_ejecutivo').value;
+            const ejecutivo = listaEjecutivos.find(e => e.nombre === nombre);
+            if (ejecutivo) {
+                document.getElementById('inp_correo').value = ejecutivo.correo;
+                document.getElementById('inp_telefono').value = ejecutivo.tel;
+                ['inp_correo','inp_telefono'].forEach(id => document.getElementById(id).setAttribute('readonly', true));
+                ['check_nombre','check_correo','check_telefono'].forEach(id => document.getElementById(id).classList.add('visible'));
+            }
+        }
+
+        function toggleEditName() {
+            manualNameMode = !manualNameMode;
+            const select = document.getElementById('inp_ejecutivo');
+            const input = document.getElementById('inp_ejecutivo_manual');
+            const check = document.getElementById('check_nombre');
+            if (manualNameMode) {
+                input.value = select.value; select.style.display = 'none'; input.style.display = 'block'; input.focus(); check.classList.remove('visible');
+            } else {
+                input.style.display = 'none'; select.style.display = 'block'; select.value = ""; check.classList.remove('visible');
+            }
+        }
+
+        function enableField(inputId, checkId) {
+            const input = document.getElementById(inputId);
+            input.removeAttribute('readonly'); input.focus();
+            document.getElementById(checkId).classList.remove('visible');
+        }
+
+        function animateValue(id, start, end, duration) {
+            const obj = document.getElementById(id); if(!obj) return;
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                obj.innerText = formatoDinero(Math.floor(progress * (end - start) + start));
+                if (progress < 1) window.requestAnimationFrame(step);
+            };
+            window.requestAnimationFrame(step);
+        }
+
         function formatearInput(elem) {
             if (!elem.value) return;
             const valorLimpio = parseFloat(elem.value.replace(/[^0-9.]/g, ''));
             if (!isNaN(valorLimpio)) elem.value = formatoDinero(valorLimpio);
         }
-
-        function desformatearInput(elem) {
-            if (!elem.value) return;
-            elem.value = elem.value.replace(/[^0-9.]/g, '');
-        }
-
-        function obtenerValorNumerico(idElemento) {
-            const val = document.getElementById(idElemento).value;
-            const limpio = val.replace(/[^0-9.]/g, '');
-            return parseFloat(limpio) || 0;
-        }
-
-        function cargarDatosEjecutivo() {
-            const nombre = document.getElementById('inp_ejecutivo').value;
-            const ejecutivo = listaEjecutivos.find(e => e.nombre === nombre);
-            document.getElementById('inp_correo').value = ejecutivo ? ejecutivo.correo : "";
-            document.getElementById('inp_telefono').value = ejecutivo ? ejecutivo.tel : "";
-        }
+        function desformatearInput(elem) { if(elem.value) elem.value = elem.value.replace(/[^0-9.]/g, ''); }
+        function obtenerValorNumerico(id) { return parseFloat(document.getElementById(id).value.replace(/[^0-9.]/g, '')) || 0; }
 
         function iniciarCotizador(tipo) {
-            tipoActual = tipo;
-            const config = configuracion[tipo];
-            divMenu.style.display = 'none';
-            divForm.style.display = 'block';
-            document.getElementById('tituloFormulario').innerText = config.titulo;
+            tipoActual = tipo; const config = configuracion[tipo];
+            divMenu.style.display = 'none'; divForm.style.display = 'block'; divForm.classList.add('fade-in');
+            document.getElementById('tituloFormulario').innerText = config.titulo.replace("Cotizador ", "");
             pdfUrl = config.pdf; 
-            const rInfo = document.getElementById('rangoInfo');
-            rInfo.innerText = `Rango: ${formatoDinero(config.min)} — ${formatoDinero(config.max)}`;
+            document.getElementById('rangoInfo').innerText = `Rango: ${formatoDinero(config.min)} — ${formatoDinero(config.max)}`;
 
-            if (config.isDual) {
-                inputSingle.style.display = 'none';
-                inputDual.style.display = 'grid';
-                netoSingle.style.display = 'none';
-                netoDual.style.display = 'block';
-                rowPlusvalia.style.display = 'block'; 
-                divCliente2.style.display = 'block'; 
-            } else {
-                inputSingle.style.display = 'block';
-                inputDual.style.display = 'none';
-                netoSingle.style.display = 'flex';
-                netoDual.style.display = 'none';
-                divCliente2.style.display = 'none'; 
-                if (tipo === 'tipo2') rowPlusvalia.style.display = 'block';
-                else rowPlusvalia.style.display = 'none';
-            }
-            limpiarCampos();
-            calcularDesglose();
-            window.scrollTo(0, 0);
+            const isDual = config.isDual;
+            inputSingle.style.display = isDual ? 'none' : 'block';
+            inputDual.style.display = isDual ? 'flex' : 'none';
+            netoSingle.style.display = isDual ? 'none' : 'flex';
+            netoDual.style.display = isDual ? 'flex' : 'none';
+            divCliente2.style.display = isDual ? 'block' : 'none';
+            rowPlusvalia.style.display = (isDual || tipo === 'tipo2') ? 'block' : 'none';
+
+            limpiarCampos(); calcularDesglose(); window.scrollTo(0,0);
         }
 
         function regresarMenu() {
-            divForm.style.display = 'none';
-            divMenu.style.display = 'grid';
-            limpiarCampos();
-            window.scrollTo(0, 0);
+            divForm.style.display = 'none'; divMenu.style.display = 'grid'; stickyBar.style.display = 'none';
+            limpiarCampos(); window.scrollTo(0,0);
         }
 
         function limpiarCampos() {
-            document.getElementById('inp_cliente').value = '';
-            document.getElementById('inp_cliente2').value = '';
-            document.getElementById('inp_valor').value = '';
-            document.getElementById('inp_neto').value = '';
-            document.getElementById('inp_valor1').value = '';
-            document.getElementById('inp_valor2').value = '';
-            document.getElementById('inp_neto1').value = '';
-            document.getElementById('inp_neto2').value = '';
-            document.getElementById('lbl_suma_total').innerText = '$0.00';
-            document.getElementById('lbl_neto_total_dual').innerText = '$0.00';
-            document.getElementById('inp_porcentaje_descuento').value = '0';
-            document.getElementById('inp_plusvalia').value = '';
-            document.getElementById('inp_costos_compra').value = '';
-            document.getElementById('inp_costos_venta').value = '';
-            document.getElementById('inp_honorarios').value = '';
+            ['inp_cliente','inp_cliente2','inp_valor','inp_valor1','inp_valor2'].forEach(id=>document.getElementById(id).value='');
+            document.getElementById('inp_porcentaje_descuento').value='0';
             document.getElementById('inp_fecha').value = new Date().toISOString().split('T')[0];
-            alerta.style.display = 'none';
-            btnGenerar.disabled = false;
+            
+            document.getElementById('inp_ejecutivo').value = "";
+            document.getElementById('inp_ejecutivo').style.display = "block";
+            document.getElementById('inp_ejecutivo_manual').style.display = "none";
+            manualNameMode = false;
+            ['inp_correo','inp_telefono'].forEach(id=>document.getElementById(id).value="");
+            document.querySelectorAll('.icon-check').forEach(el => el.classList.remove('visible'));
+
+            previousValues = { neto: 0, neto1: 0, neto2: 0 };
+            ['display_neto','display_neto1','display_neto2'].forEach(id=>document.getElementById(id).innerText='$0.00');
+            alerta.style.display = 'none'; btnGenerar.disabled = false;
+            document.querySelectorAll('.floating-input').forEach(el => el.classList.remove('valid-range'));
         }
 
         function calcularDesglose() {
             const config = configuracion[tipoActual];
-            let valorTotal = 0; let val1 = 0; let val2 = 0;
+            let valorTotal = 0, val1 = 0, val2 = 0;
 
             if (config.isDual) {
-                val1 = obtenerValorNumerico('inp_valor1');
-                val2 = obtenerValorNumerico('inp_valor2');
+                val1 = obtenerValorNumerico('inp_valor1'); val2 = obtenerValorNumerico('inp_valor2');
                 valorTotal = val1 + val2;
-                document.getElementById('lbl_suma_total').innerText = formatoDinero(valorTotal);
+            } else { valorTotal = obtenerValorNumerico('inp_valor'); }
+
+            const pct = (parseFloat(document.getElementById('inp_porcentaje_descuento').value)||0)/100; 
+            const isValid = (valorTotal > 0 && valorTotal >= config.min && valorTotal <= config.max);
+
+            // Validacion visual
+            if(config.isDual) {
+                const in1 = document.getElementById('inp_valor1'); const in2 = document.getElementById('inp_valor2');
+                if(isValid) { in1.classList.add('valid-range'); in2.classList.add('valid-range'); } 
+                else { in1.classList.remove('valid-range'); in2.classList.remove('valid-range'); }
             } else {
-                valorTotal = obtenerValorNumerico('inp_valor');
+                const inS = document.getElementById('inp_valor');
+                if(isValid) inS.classList.add('valid-range'); else inS.classList.remove('valid-range');
             }
 
-            const porcentajeDecimal = (parseFloat(document.getElementById('inp_porcentaje_descuento').value) || 0) / 100; 
-
-            // Validación Rango General
-            if (valorTotal > 0 && (valorTotal < config.min || valorTotal > config.max)) {
-                alerta.style.display = 'block';
-                btnGenerar.disabled = true; 
-                if(config.isDual) {
-                    document.getElementById('inp_neto1').value = "$0.00";
-                    document.getElementById('inp_neto2').value = "$0.00";
-                } else {
-                    document.getElementById('inp_neto').value = "$0.00";
-                }
+            if (!isValid && valorTotal > 0) {
+                alerta.style.display = 'block'; btnGenerar.disabled = true;
+                animateValue("display_neto", previousValues.neto, 0, 300); previousValues.neto=0;
+                document.getElementById('sticky_value').innerText="$0.00";
                 return;
-            } else {
-                alerta.style.display = 'none';
-                btnGenerar.disabled = false;
-            }
+            } else { alerta.style.display = 'none'; btnGenerar.disabled = false; }
 
-            let costosCompra = 0; let costosVenta = 0; let honorariosBase = 0; let plusvalia = 0;
+            let cCompra = 0, cVenta = 0, hBase = 0, plusvalia = 0;
 
-            // --- LÓGICA TIPO 1 (Expandida hasta 370,000) ---
             if (tipoActual === 'tipo1') {
-                plusvalia = 0;
-                if (valorTotal >= 180000 && valorTotal <= 370000) { 
-                    costosCompra = 18000; costosVenta = 7250; honorariosBase = 43000; 
-                } 
-            }
-            // --- LÓGICA TIPO 2 y CORRESIDENCIAL (Desde 325,000) ---
-            else if (tipoActual === 'tipo2' || tipoActual === 'corresidencial') {
+                if (valorTotal >= 180000 && valorTotal <= 370000) { cCompra = 18000; cVenta = 7250; hBase = 43000; }
+            } else {
                 if (valorTotal >= 325000) {
                     plusvalia = valorTotal * 0.03;
-                    // Se inicia desde 325,000 con la primera tarifa
-                    if (valorTotal >= 325000 && valorTotal < 375000) { costosCompra = 36000; costosVenta = 14500; honorariosBase = 50000; }
-                    else if (valorTotal >= 375000 && valorTotal < 450000) { costosCompra = 36000; costosVenta = 14500; honorariosBase = 55000; }
-                    else if (valorTotal >= 450000 && valorTotal < 500000) { costosCompra = 38000; costosVenta = 17000; honorariosBase = 59000; }
-                    else if (valorTotal >= 500000 && valorTotal < 650000) { costosCompra = 38000; costosVenta = 17000; honorariosBase = 70000; }
-                    else if (valorTotal >= 650000 && valorTotal < 800000) { costosCompra = 38000; costosVenta = 17000; honorariosBase = 85000; }
-                    else if (valorTotal >= 800000 && valorTotal < 950000) { costosCompra = 61000; costosVenta = 17000; honorariosBase = 97000; }
-                    else if (valorTotal >= 950000 && valorTotal < 1010000) { costosCompra = 61000; costosVenta = 17000; honorariosBase = 109000; }
-                    else if (valorTotal >= 1010000 && valorTotal < 1150000) { costosCompra = 75000; costosVenta = 17000; honorariosBase = 121000; }
-                    else if (valorTotal >= 1150000 && valorTotal < 1350000) { costosCompra = 75000; costosVenta = 17000; honorariosBase = 135000; }
-                    else if (valorTotal >= 1350000) { costosCompra = 88000; costosVenta = 17000; honorariosBase = 155000; }
+                    if (valorTotal < 375000) { cCompra=36000; cVenta=14500; hBase=50000; }
+                    else if (valorTotal < 450000) { cCompra=36000; cVenta=14500; hBase=55000; }
+                    else if (valorTotal < 500000) { cCompra=38000; cVenta=17000; hBase=59000; }
+                    else if (valorTotal < 650000) { cCompra=38000; cVenta=17000; hBase=70000; }
+                    else if (valorTotal < 800000) { cCompra=38000; cVenta=17000; hBase=85000; }
+                    else if (valorTotal < 950000) { cCompra=61000; cVenta=17000; hBase=97000; }
+                    else if (valorTotal < 1010000) { cCompra=61000; cVenta=17000; hBase=109000; }
+                    else if (valorTotal < 1150000) { cCompra=75000; cVenta=17000; hBase=121000; }
+                    else if (valorTotal < 1350000) { cCompra=75000; cVenta=17000; hBase=135000; }
+                    else { cCompra=88000; cVenta=17000; hBase=155000; }
                 }
             }
 
-            const cantidadDescuento = honorariosBase * porcentajeDecimal;
-            const honorariosFinal = honorariosBase - cantidadDescuento;
-            const totalEgresos = costosCompra + costosVenta + honorariosFinal;
-            let netoGlobal = 0;
-            if (valorTotal > 0) netoGlobal = valorTotal - totalEgresos + plusvalia;
-
-            let textoDescuento = "";
-            if (porcentajeDecimal > 0) textoDescuento = "Descuento (" + (porcentajeDecimal * 100) + "%): -" + cantidadDescuento.toFixed(2);
+            const hFinal = hBase - (hBase * pct);
+            const netoGlobal = Math.max(0, valorTotal - (cCompra + cVenta + hFinal) + plusvalia);
 
             document.getElementById('inp_plusvalia').value = formatoDinero(plusvalia);
-            document.getElementById('inp_costos_compra').value = formatoDinero(costosCompra);
-            document.getElementById('inp_costos_venta').value = formatoDinero(costosVenta);
-            document.getElementById('inp_honorarios').value = formatoDinero(honorariosFinal);
-            document.getElementById('inp_leyenda_descuento').value = textoDescuento;
+            document.getElementById('inp_costos_compra').value = formatoDinero(cCompra);
+            document.getElementById('inp_costos_venta').value = formatoDinero(cVenta);
+            document.getElementById('inp_honorarios').value = formatoDinero(hFinal);
+            document.getElementById('inp_leyenda_descuento').value = pct > 0 ? `Descuento -${formatoDinero(hBase*pct)}` : "";
 
             if (config.isDual) {
-                const porcentaje1 = valorTotal > 0 ? (val1 / valorTotal) : 0;
-                const porcentaje2 = valorTotal > 0 ? (val2 / valorTotal) : 0;
-                const neto1 = netoGlobal * porcentaje1;
-                const neto2 = netoGlobal * porcentaje2;
-
-                document.getElementById('inp_neto1').value = formatoDinero(neto1);
-                document.getElementById('inp_neto2').value = formatoDinero(neto2);
-                document.getElementById('lbl_neto_total_dual').innerText = formatoDinero(netoGlobal);
+                const n1 = Math.floor(netoGlobal * (valorTotal>0 ? val1/valorTotal : 0));
+                const n2 = Math.floor(netoGlobal * (valorTotal>0 ? val2/valorTotal : 0));
+                animateValue("display_neto1", previousValues.neto1, n1, 500);
+                animateValue("display_neto2", previousValues.neto2, n2, 500);
+                previousValues.neto1 = n1; previousValues.neto2 = n2;
+                document.getElementById('inp_neto1').value = formatoDinero(n1);
+                document.getElementById('inp_neto2').value = formatoDinero(n2);
+                document.getElementById('sticky_value').innerText = formatoDinero(netoGlobal);
             } else {
+                animateValue("display_neto", previousValues.neto, Math.floor(netoGlobal), 500);
+                previousValues.neto = Math.floor(netoGlobal);
                 document.getElementById('inp_neto').value = formatoDinero(netoGlobal);
+                document.getElementById('sticky_value').innerText = formatoDinero(netoGlobal);
             }
 
-            divForm.dataset.honorariosFinal = honorariosFinal.toFixed(2);
+            divForm.dataset.honorariosFinal = hFinal.toFixed(2);
             divForm.dataset.plusvalia = plusvalia.toFixed(2);
-            divForm.dataset.textoDescuento = textoDescuento;
+            divForm.dataset.textoDescuento = pct > 0 ? `Descuento -${formatoDinero(hBase*pct)}` : "";
             divForm.dataset.valorTotalPDF = valorTotal;
             divForm.dataset.netoTotalPDF = netoGlobal;
+
+            if(netoGlobal > 0 && window.innerWidth <= 768) stickyBar.style.display = 'flex';
         }
 
         function formatoDinero(num) { return new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' }).format(num); }
-        function formatearFechaTexto(fechaStr) {
-            if (!fechaStr) return "";
-            const [anio, mes, dia] = fechaStr.split('-');
-            const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
-            return `${dia} de ${meses[parseInt(mes) - 1]} ${anio}`;
-        }
-        
-        function cerrarModal() { modal.style.display = 'none'; }
-        function unirPDFs() { window.open('https://www.ilovepdf.com/es/unir_pdf', '_blank'); }
+        function formatearFechaTexto(f) { if(!f)return""; const[a,m,d]=f.split('-'); const ms=["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"]; return `${d} de ${ms[parseInt(m)-1]} ${a}`; }
+        function cerrarModal(){ modal.style.display='none'; }
+        function unirPDFs(){ window.open('https://www.ilovepdf.com/es/unir_pdf','_blank'); }
 
         async function generarPDF() {
             const { PDFDocument } = PDFLib; if(!pdfUrl) return;
-            const fechaBonita = formatearFechaTexto(document.getElementById('inp_fecha').value);
             const config = configuracion[tipoActual];
             
-            let valParaPDF = 0; let netoParaPDF = 0;
-            if (config.isDual) {
-                valParaPDF = parseFloat(divForm.dataset.valorTotalPDF);
-                netoParaPDF = parseFloat(divForm.dataset.netoTotalPDF);
-            } else {
-                valParaPDF = obtenerValorNumerico('inp_valor');
-                netoParaPDF = document.getElementById('inp_neto').value.replace(/[^0-9.-]+/g,""); 
-            }
+            let valP = 0, netoP = 0;
+            if(config.isDual) { valP = parseFloat(divForm.dataset.valorTotalPDF); netoP = parseFloat(divForm.dataset.netoTotalPDF); }
+            else { valP = obtenerValorNumerico('inp_valor'); netoP = parseFloat(document.getElementById('inp_neto').value.replace(/[^0-9.-]+/g,"")); }
 
-            // --- FORZAR MAYÚSCULAS ---
-            const cliente1 = (document.getElementById('inp_cliente').value.trim() || "CLIENTE").toUpperCase();
-            const cliente2 = document.getElementById('inp_cliente2').value.trim().toUpperCase();
-            
-            const safeC1 = cliente1.replace(/[^a-zA-Z0-9ÁÉÍÓÚÑ ]/g, "");
-            let nombreArchivo = `Propuesta_${safeC1}.pdf`;
-            
-            if(config.isDual && cliente2) {
-                const safeC2 = cliente2.replace(/[^a-zA-Z0-9ÁÉÍÓÚÑ ]/g, "");
-                nombreArchivo = `Propuesta_${safeC1}_y_${safeC2}.pdf`;
-            }
+            const c1 = (document.getElementById('inp_cliente').value.trim() || "CLIENTE").toUpperCase();
+            const c2 = document.getElementById('inp_cliente2').value.trim().toUpperCase();
+            let execName = manualNameMode ? document.getElementById('inp_ejecutivo_manual').value : document.getElementById('inp_ejecutivo').value;
 
-            const mapDatos = {
-                'Cliente': cliente1,
-                'Cliente2': cliente2,
-                'Fecha': fechaBonita,
-                'Ejecutivo_Nombre': document.getElementById('inp_ejecutivo').value,
+            const map = {
+                'Cliente': c1, 'Cliente2': c2,
+                'Fecha': formatearFechaTexto(document.getElementById('inp_fecha').value),
+                'Ejecutivo_Nombre': execName,
                 'Correo': document.getElementById('inp_correo').value,
                 'Telefono': document.getElementById('inp_telefono').value,
-                'valor': formatoDinero(valParaPDF),
+                'valor': formatoDinero(valP),
                 'Plusvalia': formatoDinero(divForm.dataset.plusvalia),
                 'CostosCompra': document.getElementById('inp_costos_compra').value,
                 'CostosVenta': document.getElementById('inp_costos_venta').value,
-                'Honorarios': document.getElementById('inp_honorarios').value, 
+                'Honorarios': document.getElementById('inp_honorarios').value,
                 'DescuentoHonorarios': divForm.dataset.textoDescuento,
-                'neto': formatoDinero(netoParaPDF)
+                'neto': formatoDinero(netoP)
             };
-            
             if(config.isDual) {
-                mapDatos['Valor1'] = document.getElementById('inp_valor1').value; 
-                mapDatos['Valor2'] = document.getElementById('inp_valor2').value;
-                mapDatos['Neto1'] = document.getElementById('inp_neto1').value;
-                mapDatos['Neto2'] = document.getElementById('inp_neto2').value;
+                map['Valor1']=document.getElementById('inp_valor1').value; map['Valor2']=document.getElementById('inp_valor2').value;
+                map['Neto1']=document.getElementById('inp_neto1').value; map['Neto2']=document.getElementById('inp_neto2').value;
             }
 
             try {
                 const existingPdfBytes = await fetch(pdfUrl).then(res => res.arrayBuffer());
                 const pdfDoc = await PDFDocument.load(existingPdfBytes);
                 const form = pdfDoc.getForm();
-                for (const [campoPDF, valorWeb] of Object.entries(mapDatos)) { 
-                    try { const field = form.getTextField(campoPDF); if(field) field.setText(valorWeb); } catch (e) {} 
-                }
-                form.flatten(); 
+                for (const [key, val] of Object.entries(map)) { try { const f = form.getTextField(key); if(f) f.setText(val); } catch (e){} }
+                form.flatten();
                 const pdfBytes = await pdfDoc.save();
-                download(pdfBytes, nombreArchivo, "application/pdf");
-                modal.style.display = 'flex';
-            } catch (error) { console.error(error); alert("Error: Verifica el archivo PDF."); }
-        }
-
-        function download(data, filename, type) {
-            var file = new Blob([data], {type: type});
-            var a = document.createElement("a"), url = URL.createObjectURL(file);
-            a.href = url; a.download = filename; document.body.appendChild(a); a.click();
-            setTimeout(function() { document.body.removeChild(a); window.URL.revokeObjectURL(url); }, 0); 
+                
+                const safeName = c1.replace(/[^a-zA-Z0-9ÁÉÍÓÚÑ ]/g, "");
+                const filename = config.isDual && c2 ? `Propuesta_${safeName}_y_${c2.replace(/[^a-zA-Z0-9ÁÉÍÓÚÑ ]/g, "")}.pdf` : `Propuesta_${safeName}.pdf`;
+                
+                const blob = new Blob([pdfBytes], {type: "application/pdf"});
+                const link = document.createElement("a"); link.href = URL.createObjectURL(blob); link.download = filename;
+                document.body.appendChild(link); link.click(); setTimeout(()=>document.body.removeChild(link),0);
+                modal.style.display='flex';
+            } catch (err) { console.error(err); alert("Error al generar PDF."); }
         }
     </script>
 </body>
